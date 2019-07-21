@@ -1054,8 +1054,8 @@
                     IF ( FLG_O2 ) THEN
                         CALL W3SETO ( I, MDSE, MDST )
 !
-!/MPI                        IF ( NRQPO.NE.0 ) CALL MPI_STARTALL      &
-!/MPI                                     ( NRQPO, IRQPO1, IERR_MPI )
+!!/MPI                        IF ( NRQPO.NE.0 ) CALL MPI_STARTALL      &
+!!/MPI                                     ( NRQPO, IRQPO1, IERR_MPI )
 !
                         IF ( NOPTS.NE.0 .AND. IAPROC.EQ.NAPPNT ) THEN
                             CALL W3SETG ( I, MDSE, MDST )
@@ -1065,8 +1065,8 @@
 !
 !/MPI                        IF ( NRQPO .NE. 0 ) THEN
 !/MPI                            ALLOCATE ( STATUS(MPI_STATUS_SIZE,NRQPO) )
-!/MPI                            CALL MPI_WAITALL                      &
-!/MPI                               ( NRQPO, IRQPO1, STATUS, IERR_MPI )
+!!/MPI                            CALL MPI_WAITALL                      &
+!!/MPI                               ( NRQPO, IRQPO1, STATUS, IERR_MPI )
 !/MPI                            DEALLOCATE ( STATUS )
 !/MPI                          END IF
 !

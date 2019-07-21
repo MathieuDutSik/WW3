@@ -4072,10 +4072,14 @@
 !
 ! 1.c Send if point is stored here
 !
+!/MPI          WRITE(740+IAPROC,*) 'I=', I, ' J=', J, ' IP(J)=', IP(J), 'IH=', IH
+!/MPI          FLUSH(740+IAPROC)
 !/MPI          IF ( IP(J) .EQ. IAPROC ) THEN
 !/MPI              IH     = IH + 1
 !/MPI              CALL MPI_SEND_INIT ( VA(1,JSEA), NSPEC, MPI_REAL, &
 !/MPI                   IROOT, IT, MPI_COMM_WAVE, IRQPO1(IH), IERR )
+!/MPI              WRITE(740+IAPROC,*) 'IH=', IH, ' IRQPO1(IH)=', IRQPO1(IH), ' IT=', IT
+!/MPI              FLUSH(740+IAPROC)
 !/MPIT              WRITE (NDST,9011) IH,I,J, IROOT,IT, IRQPO1(IH), IERR
 !/MPI            END IF
 !
@@ -4088,6 +4092,8 @@
 !/MPI        END DO
 !
 !/MPI      NRQPO  = IH
+!/MPI          WRITE(740+IAPROC,*) 'NRQPO=', NRQPO
+!/MPI          FLUSH(740+IAPROC)
 !
 !/MPIT      WRITE (NDST,9012)
 !/MPIT      WRITE (NDST,9013) NRQPO

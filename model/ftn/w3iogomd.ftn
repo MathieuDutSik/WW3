@@ -1292,6 +1292,10 @@
 !/
 !/S      CALL STRACE (IENT, 'W3OUTG')
 !
+
+!/DEBUGSTP    WRITE(740+IAPROC,*) 'W3OUTG, step 1'
+!/DEBUGSTP    FLUSH(740+IAPROC)
+
 !/DEBUGSTP    WRITE(740+IAPROC,*) 'NTH=', NTH
 !/DEBUGSTP    WRITE(740+IAPROC,*) 'NK=', NK
 !/DEBUGSTP    WRITE(740+IAPROC,*) 'NSPEC=', NSPEC
@@ -1423,6 +1427,8 @@
 !
 ! 2.b Integrate energy in band
 !
+!/DEBUGSTP    WRITE(740+IAPROC,*) 'W3OUTG, step 2'
+!/DEBUGSTP    FLUSH(740+IAPROC)
         DO ITH=1, NTH
 !
 !/OMPG/!$OMP PARALLEL DO PRIVATE(JSEA,ISEA,FACTOR)
@@ -1593,6 +1599,8 @@
 !/OMPG/!$OMP END PARALLEL DO
 !
         END DO
+!/DEBUGSTP    WRITE(740+IAPROC,*) 'W3OUTG, step 3'
+!/DEBUGSTP    FLUSH(740+IAPROC)
 !
 ! Start of Space-Time Extremes Section
      IF ( ( STEXU .GT. 0. .AND. STEYU .GT. 0. ) &
@@ -1620,6 +1628,8 @@
           END IF
         END DO
 !
+!/DEBUGSTP    WRITE(740+IAPROC,*) 'W3OUTG, step 4'
+!/DEBUGSTP    FLUSH(740+IAPROC)
       DO IK=1, NK
 !
         ABX2M = 0.
@@ -1651,6 +1661,8 @@
 !/OMPG/!$OMP END PARALLEL DO
 !
           END DO
+!/DEBUGSTP    WRITE(740+IAPROC,*) 'W3OUTG, step 5'
+!/DEBUGSTP    FLUSH(740+IAPROC)
 !
 !/OMPG/!$OMP PARALLEL DO PRIVATE(JSEA,ISEA,FACTOR)
 !
@@ -1673,6 +1685,8 @@
 !/OMPG/!$OMP END PARALLEL DO
 !
         END DO
+!/DEBUGSTP    WRITE(740+IAPROC,*) 'W3OUTG, step 6'
+!/DEBUGSTP    FLUSH(740+IAPROC)
 
 !/OMPG/!$OMP PARALLEL DO PRIVATE(JSEA,ISEA)
 !
@@ -1828,6 +1842,8 @@
 
 ! End of Space-Time Extremes Section
      ENDIF
+!/DEBUGSTP    WRITE(740+IAPROC,*) 'W3OUTG, step 7'
+!/DEBUGSTP    FLUSH(740+IAPROC)
 !
 ! 3.  Finalize computation of mean parameters ------------------------ *
 !
@@ -1877,6 +1893,8 @@
       SXX    = SXX * DWAT * GRAV
       SYY    = SYY * DWAT * GRAV
       SXY    = SXY * DWAT * GRAV
+!/DEBUGSTP    WRITE(740+IAPROC,*) 'W3OUTG, step 8'
+!/DEBUGSTP    FLUSH(740+IAPROC)
 !
 !/OMPG/!$OMP PARALLEL DO PRIVATE(JSEA,ISEA,IX,IY)
 !
@@ -1934,6 +1952,8 @@
 !
           END IF
         END DO
+!/DEBUGSTP    WRITE(740+IAPROC,*) 'W3OUTG, step 9'
+!/DEBUGSTP    FLUSH(740+IAPROC)
 !
 !/OMPG/!$OMP END PARALLEL DO
 !
@@ -1951,6 +1971,8 @@
 !
 ! 4.  Peak frequencies and directions -------------------------------- *
 ! 4.a Initialize
+!/DEBUGSTP    WRITE(740+IAPROC,*) 'W3OUTG, step 10'
+!/DEBUGSTP    FLUSH(740+IAPROC)
 !
 !/OMPG/!$OMP PARALLEL DO PRIVATE(JSEA,ISEA,FPISTR,FP1STR,FP1TST)
 !
@@ -1997,6 +2019,8 @@
 !/STX          END IF
         THP1(JSEA) = UNDEF
         END DO
+!/DEBUGSTP    WRITE(740+IAPROC,*) 'W3OUTG, step 11'
+!/DEBUGSTP    FLUSH(740+IAPROC)
 !
 !/OMPG/!$OMP END PARALLEL DO
 !
@@ -2035,6 +2059,8 @@
 !/OMPG/!$OMP END PARALLEL DO
 !
         END DO
+!/DEBUGSTP    WRITE(740+IAPROC,*) 'W3OUTG, step 12'
+!/DEBUGSTP    FLUSH(740+IAPROC)
 !
 !/OMPG/!$OMP PARALLEL DO PRIVATE(JSEA,ISEA)
 !
@@ -2092,6 +2118,8 @@
 !/ST4        FP1(JSEA) = FP1(JSEA) * ( 1. + 0.5 * (XL2*EH - XH2*EL )  &
 !/ST4                       / SIGN ( MAX(ABS(DENOM),1.E-15) , DENOM ) )
         END DO
+!/DEBUGSTP    WRITE(740+IAPROC,*) 'W3OUTG, step 13'
+!/DEBUGSTP    FLUSH(740+IAPROC)
 !
 !/OMPG/!$OMP END PARALLEL DO
 !
@@ -2103,6 +2131,8 @@
         ETX(JSEA) = 0.
         ETY(JSEA) = 0.
         END DO
+!/DEBUGSTP    WRITE(740+IAPROC,*) 'W3OUTG, step 14'
+!/DEBUGSTP    FLUSH(740+IAPROC)
 !
 !/OMPG/!$OMP END PARALLEL DO
 !
@@ -2155,6 +2185,8 @@
 !/OMPG/!$OMP END PARALLEL DO
 !
         END DO
+!/DEBUGSTP    WRITE(740+IAPROC,*) 'W3OUTG, step 15'
+!/DEBUGSTP    FLUSH(740+IAPROC)
 !
 !/OMPG/!$OMP PARALLEL DO PRIVATE(JSEA,ISEA,IX,IY)
 !
@@ -2171,6 +2203,8 @@
 !
 !/OMPG/!$OMP END PARALLEL DO
 !
+!/DEBUGSTP    WRITE(740+IAPROC,*) 'W3OUTG, step 16'
+!/DEBUGSTP    FLUSH(740+IAPROC)
 !/OMPG/!$OMP PARALLEL DO PRIVATE(ISEA,JSEA)
 !
       DO JSEA=1, NSEAL
@@ -2209,6 +2243,8 @@
 !
 ! 6.  Fill arrays wth partitioned data
 !
+!/DEBUGSTP    WRITE(740+IAPROC,*) 'W3OUTG, step 17'
+!/DEBUGSTP    FLUSH(740+IAPROC)
       IF ( FLPART ) THEN
 !
 ! 6.a Initializations
@@ -2317,6 +2353,8 @@
       IF (FLOLOC( 6, 12)) THEN
          CALL CALC_U3STOKES(A,2)
       ENDIF
+!/DEBUGSTP    WRITE(740+IAPROC,*) 'W3OUTG, step 18'
+!/DEBUGSTP    FLUSH(740+IAPROC)
 !
 ! Dominant wave breaking probability
 !

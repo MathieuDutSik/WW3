@@ -1170,11 +1170,11 @@
                       OPEN                                            &
                          (SCRATCH,FILE=TRIM(FNMPRE)//'ww3_multi.scratch')
                       REWIND (SCRATCH)
-                      IF (NPTS.GT.0) THEN
+!                      IF (NPTS.GT.0) THEN
                          ALLOCATE ( X(NPTS), Y(NPTS), PNAMES(NPTS) )
-                      ELSE
-                         GOTO 2054
-                      END IF
+!                      ELSE
+!                         GOTO 2054
+!                      END IF
                     END IF
 !
                   NPTS = 0
@@ -4227,15 +4227,15 @@
                   REWIND (MDSI)
 !
                   IF ( ILOOP.EQ.2) THEN
-                    IF ( OT2(I)%NPTS.GT.0 ) THEN
+!                    IF ( OT2(I)%NPTS.GT.0 ) THEN
                       ALLOCATE ( OT2(I)%X(OT2(I)%NPTS),               &
                                  OT2(I)%Y(OT2(I)%NPTS),               &
                                  OT2(I)%PNAMES(OT2(I)%NPTS) )
                       OT2(I)%NPTS = 0  ! reset it to use it as a counter for loop 2
-                    ELSE
-                      ALLOCATE ( OT2(I)%X(1), OT2(I)%Y(1), OT2(I)%PNAMES(1) )
-                      GOTO 2054
-                    END IF
+!                    ELSE
+!                      ALLOCATE ( OT2(I)%X(1), OT2(I)%Y(1), OT2(I)%PNAMES(1) )
+!                      GOTO 2054
+!                    END IF
                   END IF
 !
                   DO
