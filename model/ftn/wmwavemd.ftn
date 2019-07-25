@@ -371,6 +371,8 @@
         TPRNT  = TSYNC(:,0)
 !
         LOOP_J: DO J=1, NRGRP
+!/DEBUGMULTI   WRITE(740+IAPROC,*) 'WMWAVEMD, step 1, J=', J
+!/DEBUGMULTI   FLUSH(740+IAPROC)
 !
 !/MPI          GRSYNC(J) = .FALSE.
 !/MPI          DO JJ=1, INGRP(J,0)
@@ -382,6 +384,8 @@
           LOOP_JJ: DO JJ=1, INGRP(J,0)
             I      = INGRP(J,JJ)
             CALL WMSETM ( I, MDSE, MDST )
+!/DEBUGMULTI   WRITE(740+IAPROC,*) 'WMWAVEMD, step 2 JJ=', JJ
+!/DEBUGMULTI   FLUSH(740+IAPROC)
 !
 !/MPI            IF ( GRSTAT(I).EQ.0 ) TMSYNC(I) = .NOT. FBCAST
 !/MPI            IF ( FBCAST ) THEN
@@ -749,8 +753,12 @@
 !/T                WRITE (MDST,9002) I, GRSTAT(I), 'RUNNING MODEL'
 !/MPRF                CALL PRTIME ( PRFT0 )
 !
+!/DEBUGMULTI   WRITE(740+IAPROC,*) 'WMWAVEMD, step 3'
+!/DEBUGMULTI   FLUSH(740+IAPROC)
                 CALL WMSETM ( I, MDSE, MDST )
                 CALL W3WAVE ( I, TSYNC(:,I), .FALSE., .TRUE. )
+!/DEBUGMULTI   WRITE(740+IAPROC,*) 'WMWAVEMD, step 4'
+!/DEBUGMULTI   FLUSH(740+IAPROC)
                 IF ( FLLSTL ) INFLAGS1(1) = .FALSE.
                 IF ( FLLSTI ) INFLAGS1(4) = .FALSE.
 !
@@ -758,6 +766,8 @@
 !
 !/MPI                CALL WMIOEF ( I )
                 CALL WMIOES ( I )
+!/DEBUGMULTI   WRITE(740+IAPROC,*) 'WMWAVEMD, step 5'
+!/DEBUGMULTI   FLUSH(740+IAPROC)
 !
 ! 5.c Finish up 
 !
@@ -769,6 +779,8 @@
 !/MPRF                                 'ST03', I
 !
               END IF
+!/DEBUGMULTI   WRITE(740+IAPROC,*) 'WMWAVEMD, step 6'
+!/DEBUGMULTI   FLUSH(740+IAPROC)
 !
 ! 6.  Reconcile grids with same rank --------------------------------- /
 !     and stage data transfer to higher and lower ranked grids.
@@ -788,6 +800,8 @@
 !
 ! 6.a.1 Check if sync point is reached
 !
+!/DEBUGMULTI   WRITE(740+IAPROC,*) 'WMWAVEMD, step 7'
+!/DEBUGMULTI   FLUSH(740+IAPROC)
                 IF ( .NOT. FLEQOK(I) ) THEN
 !
                     FLAGOK = .TRUE.
@@ -819,6 +833,8 @@
                       END IF
 !
                   END IF
+!/DEBUGMULTI   WRITE(740+IAPROC,*) 'WMWAVEMD, step 8'
+!/DEBUGMULTI   FLUSH(740+IAPROC)
 !
 ! 6.b Call gathering routine, reset FLEQOK and cycle
 !
@@ -837,6 +853,8 @@
                     FLEQOK(I) = .FALSE.
                     DONE      = .TRUE.
                   END IF
+!/DEBUGMULTI   WRITE(740+IAPROC,*) 'WMWAVEMD, step 9'
+!/DEBUGMULTI   FLUSH(740+IAPROC)
 !
 ! 6.c Stage data
 !
@@ -857,12 +875,16 @@
                     CYCLE LOOP_JJ
 !
                   END IF
+!/DEBUGMULTI   WRITE(740+IAPROC,*) 'WMWAVEMD, step 10'
+!/DEBUGMULTI   FLUSH(740+IAPROC)
 !
 !/MPRF                CALL PRTIME ( PRFTN )
 !/MPRF                WRITE (MDSP,991) PRFT0, PRFTN,              &
 !/MPRF                       get_memory(),  'ST04', I
 !
               END IF
+!/DEBUGMULTI   WRITE(740+IAPROC,*) 'WMWAVEMD, step 11'
+!/DEBUGMULTI   FLUSH(740+IAPROC)
 !
 ! 7.  Reconcile with higher ranked grids ----------------------------- /
 !     ( GRSTAT = 5 )
@@ -931,6 +953,8 @@
 !/MPRF                WRITE (MDSP,991) PRFT0, PRFTN, get_memory(),     &
 !/MPRF                                 'ST05', I
               END IF
+!/DEBUGMULTI   WRITE(740+IAPROC,*) 'WMWAVEMD, step 12'
+!/DEBUGMULTI   FLUSH(740+IAPROC)
 !
 ! 8.  Perform data assimmilation ------------------------------------- /
 !     ( GRSTAT = 6 ) Placeholder only .....
@@ -980,6 +1004,8 @@
                   END IF
 !
               END IF
+!/DEBUGMULTI   WRITE(740+IAPROC,*) 'WMWAVEMD, step 13'
+!/DEBUGMULTI   FLUSH(740+IAPROC)
 !
 ! 9.b Perform output
 !
@@ -1128,6 +1154,8 @@
                 DONE      = .TRUE.
 !
               END IF
+!/DEBUGMULTI   WRITE(740+IAPROC,*) 'WMWAVEMD, step 14'
+!/DEBUGMULTI   FLUSH(740+IAPROC)
 !
 ! 10. Go to next time step ------------------------------------------- /
 !     ( GRSTAT = 8 ) ( 9 added for diagnostic output only ... )
@@ -1217,14 +1245,20 @@
                   END IF
 !
               END IF
+!/DEBUGMULTI   WRITE(740+IAPROC,*) 'WMWAVEMD, step 15'
+!/DEBUGMULTI   FLUSH(740+IAPROC)
 !
 ! ... End of loops started in 1. ------------------------------------- /
 !
             END DO LOOP_JJ
+!/DEBUGMULTI   WRITE(740+IAPROC,*) 'WMWAVEMD, step 16'
+!/DEBUGMULTI   FLUSH(740+IAPROC)
 !
  1111       CONTINUE
 !
           END DO LOOP_J
+!/DEBUGMULTI   WRITE(740+IAPROC,*) 'WMWAVEMD, step 17'
+!/DEBUGMULTI   FLUSH(740+IAPROC)
 !
 !/MPI        NMPSCR = NMPSCS
         IF ( MDSS.NE.MDSO .AND. NMPSCR.EQ.IMPROC )                    &

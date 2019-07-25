@@ -1617,8 +1617,7 @@
 !  Compute spectral parameters wrt the mean wave direction
 !  (no tail contribution - Prognostic)
       DO JSEA=1, NSEAL
-!/DIST        ISEA   = IAPROC + (JSEA-1)*NAPROC
-!/SHRD        ISEA   = JSEA
+        CALL INIT_GET_ISEA(ISEA, JSEA)
         IX     = MAPSF(ISEA,1)
         IY     = MAPSF(ISEA,2)
         IF ( MAPSTA(IY,IX) .GT. 0 ) THEN
@@ -1643,8 +1642,7 @@
 !/OMPG/!$OMP PARALLEL DO PRIVATE(JSEA,ISEA)
 !
           DO JSEA=1, NSEAL
-!/DIST        ISEA      = IAPROC + (JSEA-1)*NAPROC
-!/SHRD        ISEA      = JSEA
+            CALL INIT_GET_ISEA(ISEA, JSEA)
             ABX2M(JSEA) = ABX2M(JSEA) + A(ITH,IK,JSEA)*                &
               (ECOS(ITH)*COS(THMP(JSEA))+ESIN(ITH)*SIN(THMP(JSEA)))**2
             ABY2M(JSEA) = ABY2M(JSEA) + A(ITH,IK,JSEA)*                &
@@ -1667,8 +1665,7 @@
 !/OMPG/!$OMP PARALLEL DO PRIVATE(JSEA,ISEA,FACTOR)
 !
         DO JSEA=1, NSEAL
-!/DIST          ISEA         = IAPROC + (JSEA-1)*NAPROC
-!/SHRD          ISEA         = JSEA
+        CALL INIT_GET_ISEA(ISEA, JSEA)
           FACTOR       = DDEN(IK) / CG(IK,ISEA)
           MSSXM(JSEA)  = MSSXM(JSEA) + ABX2M(JSEA)*FACTOR*             &
             WN(IK,ISEA)**2
@@ -1691,8 +1688,7 @@
 !/OMPG/!$OMP PARALLEL DO PRIVATE(JSEA,ISEA)
 !
         DO JSEA=1, NSEAL
-!/DIST        ISEA      = IAPROC + (JSEA-1)*NAPROC
-!/SHRD        ISEA      = JSEA
+        CALL INIT_GET_ISEA(ISEA, JSEA)
         IX     = MAPSF(ISEA,1)
         IY     = MAPSF(ISEA,2)
 !
@@ -2359,6 +2355,8 @@
 ! Dominant wave breaking probability
 !
       IF (FLOLOC(2, 17)) CALL CALC_WBT(A)
+!/DEBUGSTP    WRITE(740+IAPROC,*) 'W3OUTG, step 19'
+!/DEBUGSTP    FLUSH(740+IAPROC)
 !
       RETURN
 !
@@ -3623,6 +3621,7 @@
       USE W3ODATMD, ONLY: IAPROC, NAPROC
 !/S      USE W3SERVMD, ONLY: STRACE
 !
+      USE W3PARALL, ONLY : INIT_GET_ISEA
       IMPLICIT NONE
 !/
 !/ ------------------------------------------------------------------- /
@@ -3689,8 +3688,7 @@
 !/OMPG/!$OMP PARALLEL DO PRIVATE(JSEA,ISEA,FACTOR)
 !
             DO JSEA=1, NSEAL
-!/DIST                ISEA         = IAPROC + (JSEA-1)*NAPROC
-!/SHRD                ISEA         = JSEA
+               CALL INIT_GET_ISEA(ISEA, JSEA)
                ABX(JSEA)  = ABX(JSEA) + A(ITH,IK,JSEA)*ECOS(ITH)
                ABY(JSEA)  = ABY(JSEA) + A(ITH,IK,JSEA)*ESIN(ITH)
             END DO
@@ -3706,8 +3704,7 @@
 !PRIVATE(JSEA,ISEA,FACTOR,FACTOR2,KD,FKD,USSCO,M1)
 !
          DO JSEA=1, NSEAL
-!/DIST              ISEA         = IAPROC + (JSEA-1)*NAPROC
-!/SHRD              ISEA         = JSEA
+            CALL INIT_GET_ISEA(ISEA, JSEA)
             FACTOR       = DDEN(IK) / CG(IK,ISEA)
 !
 ! Deep water limits

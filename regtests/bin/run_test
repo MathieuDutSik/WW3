@@ -1262,7 +1262,7 @@ then
       exit 1
     fi
   else
-    exit 1
+#    exit 1
     if $runcmd $path_e/$prgb | tee $ofile
     then
       \rm -f track_i.ww3

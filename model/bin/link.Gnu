@@ -83,6 +83,7 @@
 #     No GRIB libraries for this one
 
   # linking options
+#  libs="-fcheck=all -fsanitize=address -fsanitize=undefined   -fbacktrace -fstack-protector-all"
   libs=""
 # libs="-L/opt/local/lib -L$HOME/g2lib -lg2 -lw3 -lpng -ljasper"
   opt="-o $prog"
