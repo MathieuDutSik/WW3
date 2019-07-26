@@ -1265,6 +1265,11 @@
 !          Print *, 'LPDLIB=', LPDLIB
 !          Print *, 'NY=', NY, ' NX=', NX
 !          Print *, 'NSEAL=', NSEAL
+!
+!          Quite surprisingly and unfortunately DDDX, DDDY and friends
+!          are global variables. They should be local OR be eliminated
+!          in some cases.
+!
           IF (LPDLIB .and. (GTYPE .eq. UNGTYPE)) THEN
             siz1 = 1
             siz2 = NSEAL

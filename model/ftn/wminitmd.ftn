@@ -470,12 +470,16 @@
 !
       DATA YESXX  / 'YES/--' /
       DATA XXXNO  / '---/NO' /
-!
+!!/DEBUGMULTI   WRITE(740+IAPROC,*) 'WMINITMD, step 1'
+!!/DEBUGMULTI   FLUSH(740+IAPROC)
+
 !/MPRF      CALL PRINIT
 !/MPRF      CALL PRTIME ( PRFT0 )
 !
 !/F90      CALL DATE_AND_TIME ( VALUES=CLKDT1 )
 !
+!!/DEBUGMULTI   WRITE(740+IAPROC,*) 'WMINITMD, step 2'
+!!/DEBUGMULTI   FLUSH(740+IAPROC)
       MPI_COMM_LOC   = MPI_COMM
 !/MPI      MPI_COMM_MWAVE = MPI_COMM
 !/MPI      CALL MPI_COMM_SIZE ( MPI_COMM_MWAVE, NMPROC, IERR_MPI )
@@ -493,8 +497,12 @@
 !
 ! ... Identify reserved unit numbers
 !
+!/DEBUGMULTI   WRITE(740+IMPROC,*) 'WMINITMD, step 3'
+!/DEBUGMULTI   FLUSH(740+IMPROC)
       CALL WMUSET ( 6,6,  5, .TRUE., 'SYS', 'stdin', 'Standart input' )
       CALL WMUSET ( 6,6,  6, .TRUE., 'SYS', 'stdout','Standart output')
+!/DEBUGMULTI   WRITE(740+IMPROC,*) 'WMINITMD, step 4'
+!/DEBUGMULTI   FLUSH(740+IMPROC)
 !
 !/NL2      CALL WMUSET (6,6,103, .TRUE., 'FIX', DESC='Reserved SNL2' )
 !/NL2      CALL WMUSET (6,6,104, .TRUE., 'FIX', DESC='Reserved SNL2' )
@@ -513,6 +521,8 @@
 ! ... Unit numbers from parameter list
 !     Dynamic scripture updated per file
 !
+!/DEBUGMULTI   WRITE(740+IMPROC,*) 'WMINITMD, step 5'
+!/DEBUGMULTI   FLUSH(740+IMPROC)
       MDSI   = IDSI
       MDSO   = IDSO
       MDSS   = IDSS
@@ -528,6 +538,8 @@
 ! 1.b Subroutine tracing
 !
       CALL ITRACE ( MDST, NTRMAX )
+!/DEBUGMULTI   WRITE(740+IMPROC,*) 'WMINITMD, step 6'
+!/DEBUGMULTI   FLUSH(740+IMPROC)
 !
 !/O10      IF ( MDSS.NE.MDSO .AND. NMPSCR.EQ.IMPROC ) WRITE (MDSS,900)
 !
@@ -541,8 +553,12 @@
       REWIND (MDSI)
       READ (MDSI,'(A)',END=2001,ERR=2002) COMSTR
       IF (COMSTR.EQ.' ') COMSTR = '$'
+!/DEBUGMULTI   WRITE(740+IMPROC,*) 'WMINITMD, step 7'
+!/DEBUGMULTI   FLUSH(740+IMPROC)
       CALL WMUSET ( MDSS, MDSS, MDSI, .TRUE., 'INP',                  &
                     TRIM(FNMPRE)//IFNAME, 'Model control input file')
+!/DEBUGMULTI   WRITE(740+IMPROC,*) 'WMINITMD, step 8'
+!/DEBUGMULTI   FLUSH(740+IMPROC)
 !
 ! 1.d Log and test files
 !
@@ -550,10 +566,14 @@
       IW     = 1 + INT ( LOG10 ( REAL(NMPROC) + 0.5 ) )
       IW     = MAX ( 3 , MIN ( 9 , IW ) ) 
       WRITE (FORMAT,'(A5,I1.1,A1,I1.1,A4)') '(A4,I',IW,'.',IW,',A5)'
+!/DEBUGMULTI   WRITE(740+IMPROC,*) 'WMINITMD, step 9'
+!/DEBUGMULTI   FLUSH(740+IMPROC)
 !/SHRD       TFILE  = 'test.mww3'
 !/DIST       WRITE (TFILE,FORMAT) 'test', IMPROC, '.mww3'
 !/MPRF       WRITE (PFILE,FORMAT) 'prf.', IMPROC, '.mww3'
 !
+!/DEBUGMULTI   WRITE(740+IMPROC,*) 'WMINITMD, step 10'
+!/DEBUGMULTI   FLUSH(740+IMPROC)
       IF ( IMPROC .EQ. NMPLOG ) THEN
           OPEN (MDSO,FILE=TRIM(FNMPRE)//LFILE,ERR=2010,IOSTAT=IERR)
           IF ( MDSS.NE.MDSO .AND. NMPSCR.EQ.IMPROC )                  &
@@ -564,6 +584,8 @@
           CALL WMUSET ( MDSS, MDSS, MDSO, .TRUE., 'XXX',              &
                        'Log file on other processors')
         END IF
+!/DEBUGMULTI   WRITE(740+IMPROC,*) 'WMINITMD, step 11'
+!/DEBUGMULTI   FLUSH(740+IMPROC)
 !
       IF ( MDST.NE.MDSO .AND. MDST.NE.MDSS .AND. TSTOUT ) THEN
           IFT    = LEN_TRIM(TFILE)
@@ -571,6 +593,8 @@
           CALL WMUSET ( MDSS, MDST, MDST, .TRUE., 'OUT',              &
                         TRIM(FNMPRE)//TFILE(:IFT), 'Test output file')
         END IF
+!/DEBUGMULTI   WRITE(740+IMPROC,*) 'WMINITMD, step 12'
+!/DEBUGMULTI   FLUSH(740+IMPROC)
 !
 !/MPRF      IFT    = LEN_TRIM(PFILE)
 !/MPRF      CALL WMUGET ( MDSS, MDST, MDSP, 'OUT' )
@@ -580,6 +604,8 @@
 !
 ! 1.e Initial and test output
 !
+!/DEBUGMULTI   WRITE(740+IMPROC,*) 'WMINITMD, step 13'
+!/DEBUGMULTI   FLUSH(740+IMPROC)
 !/S      CALL STRACE (IENT, 'WMINIT')
 !
       IF ( MDSS.NE.MDSO .AND. NMPSCR.EQ.IMPROC ) WRITE (MDSS,912) COMSTR
@@ -589,6 +615,8 @@
           CALL WWTIME ( STTIME )
           WRITE (MDSO,901) WWVER, STDATE, STTIME
         END IF
+!/DEBUGMULTI   WRITE(740+IMPROC,*) 'WMINITMD, step 14'
+!/DEBUGMULTI   FLUSH(740+IMPROC)
 !
 !/T      WRITE(MDST,9000) IDSI, IDSO, IDSS, IDST, IDSE, IFNAME
 !
@@ -602,6 +630,8 @@
                                       IOSTYP, UPPROC, PSHARE
       IOSTYP = MAX ( 0 , MIN ( 3 , IOSTYP ) )
 !
+!/DEBUGMULTI   WRITE(740+IMPROC,*) 'WMINITMD, step 15'
+!/DEBUGMULTI   FLUSH(740+IMPROC)
       IF ( MDSS.NE.MDSO .AND. NMPSCR.EQ.IMPROC ) THEN
           WRITE (MDSS,920) NRGRD
           IF ( NRINP .EQ. 0 ) THEN
@@ -629,6 +659,8 @@
             END IF
         END IF
 !
+!/DEBUGMULTI   WRITE(740+IMPROC,*) 'WMINITMD, step 16'
+!/DEBUGMULTI   FLUSH(740+IMPROC)
       IF ( NRGRD .LT. 1 ) GOTO 2020
       IF ( NRINP .LT. 0 ) GOTO 2021
       IF ( NRINP.EQ.0 .AND. .NOT.UNIPTS ) NRINP = -1
@@ -641,6 +673,8 @@
       CALL W3NOUT (        MDSE2, MDST )
       CALL W3NINP (        MDSE2, MDST ) 
       CALL WMNDAT (        MDSE2, MDST ) 
+!/DEBUGMULTI   WRITE(740+IMPROC,*) 'WMINITMD, step 17'
+!/DEBUGMULTI   FLUSH(740+IMPROC)
 !
 ! 2.c Set up I/O for individual models (initial)
 !
@@ -659,12 +693,16 @@
 !
 ! ... Fixed and recycleable unit numbers.      
 !
+!/DEBUGMULTI   WRITE(740+IMPROC,*) 'WMINITMD, step 18'
+!/DEBUGMULTI   FLUSH(740+IMPROC)
       CALL WMUGET ( MDSE, MDST, NDSREC, 'INP' )
       CALL WMUSET ( MDSE, MDST, NDSREC, .TRUE., 'I/O', NAME='...',    &
                     DESC='Recyclable I/O (mod_def etc.)' )
       CALL WMUGET ( MDSE, MDST, SCRATCH, 'SCR' )
       CALL WMUSET ( MDSE, MDST, SCRATCH, .TRUE., DESC='Scratch file', &
                     NAME=TRIM(FNMPRE)//'ww3_multi.scratch' )
+!/DEBUGMULTI   WRITE(740+IMPROC,*) 'WMINITMD, step 19'
+!/DEBUGMULTI   FLUSH(740+IMPROC)
 !
       IF(MDST.EQ.NDSREC)THEN
          IF   ( IMPROC .EQ. NMPERR )                                  &
@@ -672,6 +710,8 @@
             //'TEST OUTPUT UNIT NUMBER ARE THE SAME : ',MDST
          CALL EXTCDE ( 15 )
       ENDIF
+!/DEBUGMULTI   WRITE(740+IMPROC,*) 'WMINITMD, step 20'
+!/DEBUGMULTI   FLUSH(740+IMPROC)
 
       DO I=1, NRGRD
         MDS   ( 2,I) =  6
@@ -705,6 +745,8 @@
       GRGRP  = -1
       USEINP = .FALSE.
       CPLINP = .FALSE.
+!/DEBUGMULTI   WRITE(740+IMPROC,*) 'WMINITMD, step 21'
+!/DEBUGMULTI   FLUSH(740+IMPROC)
 !
 ! 3.a Read data
 !
@@ -720,6 +762,8 @@
         READ (MDSI,*,END=2001,ERR=2002) MNAMES(-I), INFLAGS1(JFIRST:7)
 !
         END DO
+!/DEBUGMULTI   WRITE(740+IMPROC,*) 'WMINITMD, step 22'
+!/DEBUGMULTI   FLUSH(740+IMPROC)
 !
 ! 3.a.2 Unified point output grid.
 !
@@ -741,6 +785,8 @@
             END IF
 !
         END IF
+!/DEBUGMULTI   WRITE(740+IMPROC,*) 'WMINITMD, step 23'
+!/DEBUGMULTI   FLUSH(740+IMPROC)
 !
 ! 3.a.3 Read wave grids
 !
@@ -758,6 +804,8 @@
       RNKTMP = MINVAL ( TMPRNK(NRGRD+1:2*NRGRD) )
       I      = 0
 !
+!/DEBUGMULTI   WRITE(740+IMPROC,*) 'WMINITMD, step 24'
+!/DEBUGMULTI   FLUSH(740+IMPROC)
       DO
         DO J=NRGRD+1, 2*NRGRD
           IF ( TMPRNK(J) .EQ. RNKTMP ) THEN
@@ -783,6 +831,8 @@
 !
 ! 3.a.5 Set input flags
 !
+!/DEBUGMULTI   WRITE(740+IMPROC,*) 'WMINITMD, step 25'
+!/DEBUGMULTI   FLUSH(740+IMPROC)
       ALLOCATE ( INPMAP(NRGRD,JFIRST:8), IDINP(-NRINP:NRGRD,JFIRST:8) )
       INPMAP = 0
       IDINP  = '---'
@@ -833,6 +883,8 @@
          END DO !         DO J=JFIRST, 7
       END DO !      DO I=1, NRGRD
 !
+!/DEBUGMULTI   WRITE(740+IMPROC,*) 'WMINITMD, step 26'
+!/DEBUGMULTI   FLUSH(740+IMPROC)
       DO I=1, NRINP
         IF ( .NOT.USEINP(I) .AND.                                     &
              MDSS.NE.MDSO .AND. NMPSCR.EQ.IMPROC ) THEN
@@ -858,6 +910,8 @@
             END IF
           END DO
         END DO
+!/DEBUGMULTI   WRITE(740+IMPROC,*) 'WMINITMD, step 27'
+!/DEBUGMULTI   FLUSH(740+IMPROC)
 !
 !/T      WRITE (MDST,9022)
 !/T      DO I=-NRINP, NRGRD
@@ -888,6 +942,8 @@
 !/T        WRITE (MDST,9033) I, MNAMES(I), GRANK(I)
 !/T        END DO
 !
+!/DEBUGMULTI   WRITE(740+IMPROC,*) 'WMINITMD, step 28'
+!/DEBUGMULTI   FLUSH(740+IMPROC)
       RNKMAX = RNKTMP
       GRPMAX = MAXVAL ( TMPGRP(1:NRGRD) ) + 1
       NRGRP  = 0
@@ -950,6 +1006,8 @@
           CALL W3IOGR ( 'GRID', NDSREC, 0, MNAMES(0)(1:J) )
 !
         END IF
+!/DEBUGMULTI   WRITE(740+IMPROC,*) 'WMINITMD, step 29'
+!/DEBUGMULTI   FLUSH(740+IMPROC)
 !
 ! 3.e Output
 !
@@ -986,6 +1044,8 @@
           IF ( MDSS.NE.MDSO .AND. NMPSCR.EQ.IMPROC ) WRITE (MDSS,929)
           IF ( NMPLOG .EQ. IMPROC ) WRITE (MDSO,929)
         END IF
+!/DEBUGMULTI   WRITE(740+IMPROC,*) 'WMINITMD, step 30'
+!/DEBUGMULTI   FLUSH(740+IMPROC)
 !
       IF ( MDSS.NE.MDSO .AND. NMPSCR.EQ.IMPROC ) WRITE (MDSS,930)
       IF ( NMPLOG .EQ. IMPROC ) WRITE (MDSO,930)
@@ -1020,6 +1080,8 @@
             WRITE (MDSO,931) I, MNAMES(I), ACTION(1:8), GRANK(I),     &
                              GRGRP(I), ACTION(9)
       END DO
+!/DEBUGMULTI   WRITE(740+IMPROC,*) 'WMINITMD, step 31'
+!/DEBUGMULTI   FLUSH(740+IMPROC)
       IF ( MDSS.NE.MDSO .AND. NMPSCR.EQ.IMPROC ) WRITE (MDSS,932)
       IF ( NMPLOG .EQ. IMPROC ) WRITE (MDSO,932)
 !
@@ -1054,6 +1116,8 @@
         END DO
       IF ( MDSS.NE.MDSO .AND. NMPSCR.EQ.IMPROC ) WRITE (MDSS,935)
       IF ( NMPLOG .EQ. IMPROC ) WRITE (MDSO,935)
+!/DEBUGMULTI   WRITE(740+IMPROC,*) 'WMINITMD, step 32'
+!/DEBUGMULTI   FLUSH(740+IMPROC)
 !
 ! 4.  Model run time information etc. -------------------------------- /
 !
@@ -1100,6 +1164,8 @@
 !
 ! 5.  Output requests ------------------------------------------------ /
 !
+!/DEBUGMULTI   WRITE(740+IMPROC,*) 'WMINITMD, step 33'
+!/DEBUGMULTI   FLUSH(740+IMPROC)
       IF ( MDSS.NE.MDSO .AND. NMPSCR.EQ.IMPROC ) WRITE (MDSS,950)
       NPTS   = 0
 !
@@ -1279,6 +1345,8 @@
 ! ... End of loop in 5.a
 !
         END DO
+!/DEBUGMULTI   WRITE(740+IMPROC,*) 'WMINITMD, step 34'
+!/DEBUGMULTI   FLUSH(740+IMPROC)
 !
 ! 5.i Set all grids to unified output
 !
@@ -1297,6 +1365,8 @@
         LPRT(I)    = LPRT(1)
         END DO
 !
+!/DEBUGMULTI   WRITE(740+IMPROC,*) 'WMINITMD, step 35'
+!/DEBUGMULTI   FLUSH(740+IMPROC)
       IF ( NPTS.EQ.0 .OR. ODAT(8,0).EQ.0 ) UNIPTS = .FALSE.
       IF ( UNIPTS ) THEN
           IF ( ( NPTS.EQ.0 .OR.  ODAT(8,0).EQ.0 ) .AND.               &
@@ -1325,6 +1395,8 @@
               END IF
             END DO
         END IF
+!/DEBUGMULTI   WRITE(740+IMPROC,*) 'WMINITMD, step 36'
+!/DEBUGMULTI   FLUSH(740+IMPROC)
 !
 ! 5.j Endless loop for correcting output per grid
 !
@@ -1512,6 +1584,8 @@
 ! ... End of loop in 5.j
 !
         END DO
+!/DEBUGMULTI   WRITE(740+IMPROC,*) 'WMINITMD, step 37'
+!/DEBUGMULTI   FLUSH(740+IMPROC)
 !
 !/T      DO I=1, NRGRD
 !/T          WRITE (MDST,9050) I
@@ -1608,6 +1682,8 @@
             END DO
 !
         END IF
+!/DEBUGMULTI   WRITE(740+IMPROC,*) 'WMINITMD, step 38'
+!/DEBUGMULTI   FLUSH(740+IMPROC)
 !
 ! 7.  Work load distribution ----------------------------------------- /
 ! 7.a Initialize arrays
@@ -1651,6 +1727,8 @@
             END IF
         END IF
 !
+!/DEBUGMULTI   WRITE(740+IMPROC,*) 'WMINITMD, step 39'
+!/DEBUGMULTI   FLUSH(740+IMPROC)
       IF ( UPPROC .AND. MDSS.NE.MDSO .AND. NMPSCR.EQ.IMPROC )         &
            WRITE (MDSS,972) NMPUPT
 !
@@ -1721,6 +1799,8 @@
               WRITE (MDSS,973) NCPROC+1, NCPROC+NPOUTT, NPOUTT
             END IF
         END IF
+!/DEBUGMULTI   WRITE(740+IMPROC,*) 'WMINITMD, step 40'
+!/DEBUGMULTI   FLUSH(740+IMPROC)
 !
 ! 7.c Set communicators and ALLPRC array
 !
@@ -1769,6 +1849,8 @@
 !/MPI                               MPI_COMM_GRD, IERR_MPI )
 !/MPI        CALL MPI_GROUP_FREE ( LGROUP, IERR_MPI )
 !
+!/DEBUGMULTI   WRITE(740+IMPROC,*) 'WMINITMD, step 41'
+!/DEBUGMULTI   FLUSH(740+IMPROC)
         DO II=IP1, IPN
           ALLPRC(II,I) = 1 + II - IP1
           END DO
@@ -1870,6 +1952,8 @@
 !
           END IF
 !
+!/DEBUGMULTI   WRITE(740+IMPROC,*) 'WMINITMD, step 42'
+!/DEBUGMULTI   FLUSH(740+IMPROC)
         IF ( MDSS.NE.MDSO .AND. NMPSCR.EQ.IMPROC )                    &
             WRITE (MDSS,975) MNAMES(I), IP1, IPN, OUTSTR
         IF ( NMPLOG .EQ. IMPROC )                                     &
@@ -1892,6 +1976,8 @@
 !/MPI         END IF
 !
         END DO
+!/DEBUGMULTI   WRITE(740+IMPROC,*) 'WMINITMD, step 43'
+!/DEBUGMULTI   FLUSH(740+IMPROC)
 !
       IF ( MDSS.NE.MDSO .AND. NMPSCR.EQ.IMPROC ) THEN
           WRITE (MDSS,976)
@@ -1945,6 +2031,8 @@
             END DO
         END IF
 !
+!/DEBUGMULTI   WRITE(740+IMPROC,*) 'WMINITMD, step 44'
+!/DEBUGMULTI   FLUSH(740+IMPROC)
       DEALLOCATE ( RP1, RPN, LOADMP )
 !
 ! 7.f Reset NMPSCR to first processor of first rank 1 grid
@@ -1981,6 +2069,8 @@
 !/MPRF      WRITE (MDSP,990) PRFT0, PRFTN, get_memory(), 'START Sec. 8.a'
 !/MPRF      PRFT0  = PRFTN
 !
+!/DEBUGMULTI   WRITE(740+IMPROC,*) 'WMINITMD, step 45'
+!/DEBUGMULTI   FLUSH(740+IMPROC)
       DO I=1, NRGRD
         J      = LEN_TRIM(MNAMES(I))
         DO NMPSC2=1, NMPROC
@@ -2048,11 +2138,15 @@
 ! ..... Model initialization
 !
         IF ( MDSS.NE.MDSO .AND. NMPSC2.EQ.IMPROC ) WRITE (MDSS,982)
+!/DEBUGMULTI   WRITE(740+IMPROC,*) 'WMINITMD, step 46'
+!/DEBUGMULTI   FLUSH(740+IMPROC)
 
         CALL W3INIT ( I, .TRUE., MNAMES(I), MDS(:,I), NTRACE(:,I), ODAT(:,I), &
                       FLGRD(:,:,I),FLGR2(:,:,I),FLGD(:,I),FLG2(:,I),  &
                       OT2(I)%NPTS, OT2(I)%X, OT2(I)%Y, OT2(I)%PNAMES, &
                       IPRT(:,I), LPRT(I), MPI_COMM_LOC )
+!/DEBUGMULTI   WRITE(740+IMPROC,*) 'WMINITMD, step 47'
+!/DEBUGMULTI   FLUSH(740+IMPROC)
 !
 ! ..... Finalize I/O file hook up
 !
@@ -2139,6 +2233,8 @@
 !
 ! 8.a.2 Data file initialization (forcing)
 !
+!/DEBUGMULTI   WRITE(740+IMPROC,*) 'WMINITMD, step 48'
+!/DEBUGMULTI   FLUSH(740+IMPROC)
         IF ( MDSS.NE.MDSO .AND. NMPSC2.EQ.IMPROC ) WRITE (MDSS,983)
         CALL W3SETI ( I, MDSE, MDST )
 !
@@ -2183,6 +2279,8 @@
                  'SIZE(INFLAGS2).NE.SIZE(TFLAGS) ***'
           CALL EXTCDE ( 999 )
         END IF
+!/DEBUGMULTI   WRITE(740+IMPROC,*) 'WMINITMD, step 49'
+!/DEBUGMULTI   FLUSH(740+IMPROC)
 
         TFLAGS = INFLAGS1
 !
@@ -2210,6 +2308,8 @@
           END IF !  IF ( INPMAP(I,J) .NE. 0 ) THEN
         END DO !  DO J=JFIRST, 7
 !
+!/DEBUGMULTI   WRITE(740+IMPROC,*) 'WMINITMD, step 50'
+!/DEBUGMULTI   FLUSH(740+IMPROC)
         INFLAGS1  = TFLAGS
         CALL W3SETI ( I, MDSE, MDST )
         CALL W3SETA ( I, MDSE, MDST )
@@ -2233,6 +2333,8 @@
 !/T        WRITE (MDST,9082) GRSTAT(I), TOUTP(:,I), TSYNC(:,I)
 !
         END DO
+!/DEBUGMULTI   WRITE(740+IMPROC,*) 'WMINITMD, step 51'
+!/DEBUGMULTI   FLUSH(740+IMPROC)
 !
 !/MPI      CALL MPI_BARRIER (MPI_COMM_MWAVE,IERR_MPI)
 !/MPI      DO I=1, NRGRD
@@ -2338,6 +2440,8 @@
 !/MPI        END DO
 !/MPI      CALL MPI_BARRIER (MPI_COMM_MWAVE,IERR_MPI)
 !
+!/DEBUGMULTI   WRITE(740+IMPROC,*) 'WMINITMD, step 52'
+!/DEBUGMULTI   FLUSH(740+IMPROC)
       DO I=1, NRGRD
         IF ( ALLPRC(IMPROC,I) .EQ. 0 ) THEN
             CALL W3SETO ( I, MDSE, MDST )
@@ -2364,6 +2468,8 @@
 !/MPRF      WRITE (MDSP,990) PRFT0, PRFTN, get_memory(), 'START Sec. 8.c'
 !/MPRF      PRFT0  = PRFTN
 !
+!/DEBUGMULTI   WRITE(740+IMPROC,*) 'WMINITMD, step 53'
+!/DEBUGMULTI   FLUSH(740+IMPROC)
       DO I=1, NRINP
 !
         IF ( .NOT. USEINP(I) ) CYCLE
@@ -2413,6 +2519,8 @@
 !
       DEALLOCATE ( USEINP )
       DEALLOCATE ( CPLINP )
+!/DEBUGMULTI   WRITE(740+IMPROC,*) 'WMINITMD, step 54'
+!/DEBUGMULTI   FLUSH(740+IMPROC)
 !
 ! 8.c Inter model initialization
 !
@@ -2450,6 +2558,8 @@
 ! ..... Unit numbers
 !
 
+!/DEBUGMULTI   WRITE(740+IMPROC,*) 'WMINITMD, step 55'
+!/DEBUGMULTI   FLUSH(740+IMPROC)
       DO I=1, NRGRD
 !
         CALL W3SETG ( I, MDSE, MDST )
@@ -2490,17 +2600,23 @@
 !
 ! ..... Data initialization
 !
+!/DEBUGMULTI   WRITE(740+IMPROC,*) 'WMINITMD, step 56'
+!/DEBUGMULTI   FLUSH(740+IMPROC)
       DO I=1, NRGRD
 !/MPI        CALL WMSETM ( I, MDSE, MDST )
 !/MPI        IF ( MPI_COMM_GRD .NE. MPI_COMM_NULL ) CALL WMIOBS ( I )
 !/SHRD        CALL WMIOBS ( I )
         END DO
+!/DEBUGMULTI   WRITE(740+IMPROC,*) 'WMINITMD, step 56.1'
+!/DEBUGMULTI   FLUSH(740+IMPROC)
 !
       DO I=1, NRGRD
 !/MPI        CALL WMSETM ( I, MDSE, MDST )
 !/MPI        IF ( MPI_COMM_GRD .NE. MPI_COMM_NULL ) CALL WMIOBG ( I )
 !/SHRD        CALL WMIOBG ( I )
         END DO
+!/DEBUGMULTI   WRITE(740+IMPROC,*) 'WMINITMD, step 56.2'
+!/DEBUGMULTI   FLUSH(740+IMPROC)
 !
 !/MPI      DO I=1, NRGRD
 !/MPI        CALL WMSETM ( I, MDSE, MDST )
@@ -2510,6 +2626,8 @@
 ! 8.c.3 Relation to same ranked grids
 !
       CALL WMGEQL
+!/DEBUGMULTI   WRITE(740+IMPROC,*) 'WMINITMD, step 57'
+!/DEBUGMULTI   FLUSH(740+IMPROC)
 !
 ! 8.c.4 Relation to higher ranked grids
 !
@@ -2562,6 +2680,8 @@
 !/MPI            END DO
 !
         END IF
+!/DEBUGMULTI   WRITE(740+IMPROC,*) 'WMINITMD, step 58'
+!/DEBUGMULTI   FLUSH(740+IMPROC)
 !
 ! 8.c.6 Output
 !
@@ -2602,6 +2722,8 @@
         END IF
       DEALLOCATE ( FLRBPI )
 !
+!/DEBUGMULTI   WRITE(740+IMPROC,*) 'WMINITMD, step 59'
+!/DEBUGMULTI   FLUSH(740+IMPROC)
       IF ( MAXVAL(GRDEQL(:,0)) .GT. 0 ) THEN
           IF ( MDSS.NE.MDSO .AND. NMPSCR.EQ.IMPROC )                  &
               WRITE (MDSS,933) 'Same rank grid dependence'
@@ -2669,6 +2791,8 @@
 !
 !    Test output of connected units (always)
 !
+!/DEBUGMULTI   WRITE(740+IMPROC,*) 'WMINITMD, step 60'
+!/DEBUGMULTI   FLUSH(740+IMPROC)
       CALL WMUSET ( MDSE, MDST, SCRATCH, .FALSE. )
       IF ( TSTOUT ) CALL WMUDMP ( MDST, 0 )
 !
@@ -2689,6 +2813,8 @@
 !!!!!/MPI CALL MPI_FINALIZE  ( IERR_MPI )
 !!!!!/MPI stop 'Ending in wminitmd, case 1'
 !
+!/DEBUGMULTI   WRITE(740+IMPROC,*) 'WMINITMD, step 61'
+!/DEBUGMULTI   FLUSH(740+IMPROC)
       RETURN
 !
 ! Escape locations read errors :

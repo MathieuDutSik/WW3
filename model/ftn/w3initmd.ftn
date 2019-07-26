@@ -4073,6 +4073,7 @@
 ! 1.c Send if point is stored here
 !
 !/MPI          WRITE(740+IAPROC,*) 'I=', I, ' J=', J, ' IP(J)=', IP(J), 'IH=', IH
+!/MPI          WRITE(740+IAPROC,*) 'NAPPNT=', NAPPNT
 !/MPI          FLUSH(740+IAPROC)
 !/MPI          IF ( IP(J) .EQ. IAPROC ) THEN
 !/MPI              IH     = IH + 1
@@ -4131,6 +4132,8 @@
 !/MPI              ITARG  = IP(J) - 1
 !/MPI              CALL MPI_RECV_INIT ( SPPNT(1,1,J), NSPEC, MPI_REAL, &
 !/MPI                   ITARG, IT, MPI_COMM_WAVE, IRQPO2(IH), IERR )
+!/DEBUGINIT        WRITE(740+IAPROC,*)  ' IH=', IH, ' IRQPO2(IH)=', IRQPO2(IH)
+!/DEBUGINIT        FLUSH(740+IAPROC)
 !/MPIT              WRITE (NDST,9011) IH,I,J, ITARG,IT, IRQPO2(IH), IERR
 !
 ! ... End of loop 1.f

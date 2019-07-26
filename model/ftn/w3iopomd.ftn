@@ -262,14 +262,22 @@
 !/
 !/S      CALL STRACE (IENT, 'W3IOPP')
 !
-      IF ( FLAGLL ) THEN
+!/DEBUGIOPO       WRITE(740+IAPROC,*)    'W3IOPP, step 1'
+!/DEBUGIOPO       FLUSH(740+IAPROC)
+        IF ( FLAGLL ) THEN
           FACTOR = 1.
         ELSE
           FACTOR = 1.E-3
         END IF
+!/DEBUGIOPO       WRITE(740+IAPROC,*)    'W3IOPP, step 2'
+!/DEBUGIOPO       FLUSH(740+IAPROC)
 !
       CALL W3DMO2 ( IMOD, NDSE, NDST, NPT )
+!/DEBUGIOPO       WRITE(740+IAPROC,*)    'W3IOPP, step 3'
+!/DEBUGIOPO       FLUSH(740+IAPROC)
       GRDID  = FILEXT
+!/DEBUGIOPO       WRITE(740+IAPROC,*)    'W3IOPP, step 4'
+!/DEBUGIOPO       FLUSH(740+IAPROC)
 !
       NOPTS  = 0
 !
@@ -291,6 +299,8 @@
 !
 ! Loop over output points
 !
+!/DEBUGIOPO       WRITE(740+IAPROC,*)    'W3IOPP, step 5'
+!/DEBUGIOPO       FLUSH(740+IAPROC)
       DO IPT=1, NPT
 !
 !/T        WRITE (NDST,9010) IPT, XPT(IPT), YPT(IPT), PNAMES(IPT)
@@ -359,6 +369,8 @@
         PTNME(NOPTS) = PNAMES(IPT)
 !
         END DO ! End loop over output points (IPT). 
+!/DEBUGIOPO       WRITE(740+IAPROC,*)    'W3IOPP, step 6'
+!/DEBUGIOPO       FLUSH(740+IAPROC)
 !
 !/RTD       DEALLOCATE( EquLon, EquLat, StdLon, StdLat, AnglPT )
 !
@@ -486,6 +498,8 @@
 !/O7a          WRITE (SCREEN,*)
 !/O7a        END IF
 !
+!/DEBUGIOPO       WRITE(740+IAPROC,*)    'W3IOPP, step 7'
+!/DEBUGIOPO       FLUSH(740+IAPROC)
       RETURN
 !
 ! Formats
@@ -623,6 +637,8 @@
       USE W3ODATMD, ONLY: NDST, NOPTS, IPTINT, PTIFAC, IL, IW, II,    &
                           DPO, WAO, WDO, ASO, CAO, CDO, ICEO, ICEHO,  &
                           ICEFO, SPCO, NAPROC
+      USE W3ODATMD, ONLY: IAPROC
+      USE W3GDATMD, ONLY: GTYPE, UNGTYPE
 !/SETUP      USE W3WDATMD, ONLY: ZETA_SETUP
 !/SETUP      USE W3ODATMD, ONLY: ZET_SETO
 !/MPI      USE W3ODATMD, ONLY: IRQPO2
@@ -659,12 +675,19 @@
 !/
 !/S      CALL STRACE (IENT, 'W3IOPE')
 !
+!/DEBUGIOPO       WRITE(740+IAPROC,*)    'W3IOPE, step 1'
+!/DEBUGIOPO       FLUSH(740+IAPROC)
+
       CX(0)  = 0.
       CY(0)  = 0.
 !
 ! Loop over spectra -------------------------------------------------- *
 !
+!/DEBUGIOPO       WRITE(740+IAPROC,*)    'W3IOPE, step 2, NOPTS=', NOPTS
+!/DEBUGIOPO       FLUSH(740+IAPROC)
       DO I=1, NOPTS
+!/DEBUGIOPO       WRITE(740+IAPROC,*)    'W3IOPE, I=', I, ' NOPTS=', NOPTS
+!/DEBUGIOPO       FLUSH(740+IAPROC)
 !
 !/T        WRITE (NDST,9000) I
 !
@@ -685,6 +708,8 @@
         RDS    = 0.
         RDI    = 0.
 !
+!/DEBUGIOPO       WRITE(740+IAPROC,*)    'W3IOPE, loop, step 2'
+!/DEBUGIOPO       FLUSH(740+IAPROC)
         DO J=1, 4
           IS(J)  = MAPFS (IY(J),IX(J))
           IM(J)  = MAPSTA(IY(J),IX(J))
@@ -702,6 +727,8 @@
                 END IF
             END IF
           END DO
+!/DEBUGIOPO       WRITE(740+IAPROC,*)    'W3IOPE, loop, step 3'
+!/DEBUGIOPO       FLUSH(740+IAPROC)
 !
 ! Depth, wind and current, ignore ice
 !
@@ -709,6 +736,8 @@
             FACRD  = 1. / (RDS+RDI)
             RD     = RD * FACRD
           END IF
+!/DEBUGIOPO       WRITE(740+IAPROC,*)    'W3IOPE, loop, step 4'
+!/DEBUGIOPO       FLUSH(740+IAPROC)
 !
 !/T        WRITE (NDST,9002) (IS(J),J=1,4), (IM(J),J=1,4), (RD(J),J=1,4)
 !
@@ -718,6 +747,7 @@
           ICEFO(I) = 0
           DO J=1, 4
             ISEA = MAPFS(IY(J),IX(J))
+!            CALL INIT_GET_JSEA_ISPROC(ISEA, JSEA, IP_unused)
 !/DIST          JSEA = 1 + (ISEA-1)/NAPROC
 !/SHRD          JSEA = ISEA
             ICEFO(I) = ICEFO(I) + RD(J)*ICEF(JSEA)
@@ -726,6 +756,8 @@
           ICEFO(I) = RD(1)*ICEF(IS(1)) + RD(2)*ICEF(IS(2)) +          &
                    RD(3)*ICEF(IS(3)) + RD(4)*ICEF(IS(4))
         END IF
+!/DEBUGIOPO       WRITE(740+IAPROC,*)    'W3IOPE, loop, step 5'
+!/DEBUGIOPO       FLUSH(740+IAPROC)
 
         ICEO(I) = RD(1)*ICE(IS(1)) + RD(2)*ICE(IS(2)) +               &
                  RD(3)*ICE(IS(3)) + RD(4)*ICE(IS(4))
@@ -749,6 +781,8 @@
                  RD(3) * UA(IS(3)) * SIN(UD(IS(3))) +                 &
                  RD(4) * UA(IS(4)) * SIN(UD(IS(4)))
 !
+!/DEBUGIOPO       WRITE(740+IAPROC,*)    'W3IOPE, loop, step 6'
+!/DEBUGIOPO       FLUSH(740+IAPROC)
         WAO(I) = SQRT ( WNDX**2 + WNDY**2 )
         IF ( WAO(I).GT.1.E-7 ) THEN
             WDO(I) = ATAN2(WNDY,WNDX)
@@ -756,6 +790,8 @@
           ELSE
             WDO(I) = 0.
           END IF
+!/DEBUGIOPO       WRITE(740+IAPROC,*)    'W3IOPE, loop, step 7'
+!/DEBUGIOPO       FLUSH(740+IAPROC)
 !
         ASO(I) = RD(1)*AS(IS(1)) + RD(2)*AS(IS(2)) +                  &
                  RD(3)*AS(IS(3)) + RD(4)*AS(IS(4))
@@ -766,12 +802,16 @@
                  RD(3)*CY(IS(3)) + RD(4)*CY(IS(4))
 !
         CAO(I) = SQRT ( CURX**2 + CURY**2 )
+!/DEBUGIOPO       WRITE(740+IAPROC,*)    'W3IOPE, loop, step 8'
+!/DEBUGIOPO       FLUSH(740+IAPROC)
         IF ( CAO(I).GT.1.E-7 ) THEN
             CDO(I) = ATAN2(CURY,CURX)
 !/RTD            IF ( FLAGUNR ) CDO(I) = CDO(I) - AnglD(IS(1))*DERA
           ELSE
             CDO(I) = 0.
           END IF
+!/DEBUGIOPO       WRITE(740+IAPROC,*)    'W3IOPE, loop, step 9'
+!/DEBUGIOPO       FLUSH(740+IAPROC)
 !
 ! Interp. weights for spectra, no ice points (spectra by def. zero)
 !
@@ -779,6 +819,8 @@
             FACRD  = (RDS+RDI) / RDS
             RD     = RD * FACRD
           END IF
+!/DEBUGIOPO       WRITE(740+IAPROC,*)    'W3IOPE, loop, step 10'
+!/DEBUGIOPO       FLUSH(740+IAPROC)
 !
 !/T        WRITE (NDST,9003) (RD(J),J=1,4)
 !
@@ -795,9 +837,18 @@
 !
 ! Extract spectra, distributed memory version(s)
 !
+!/MPI        DO J=1,4
+!/MPI          IOFF   = J + 4*(I-1)
+!/MPI          WRITE(740+IAPROC,*) 'J=', J, ' IRQPO2(IOFF)=', IRQPO2(IOFF)
+!/MPI        END DO
+!/DEBUGIOPO       WRITE(740+IAPROC,*)    'W3IOPE, loop, step 11'
+!/DEBUGIOPO       WRITE(740+IAPROC,*)    'W3IOPE, GTYPE=', GTYPE, ' UNGTYPE=', UNGTYPE
+!/DEBUGIOPO       FLUSH(740+IAPROC)
 !/MPI        IOFF   = 1 + 4*(I-1)
 !/MPI        CALL MPI_STARTALL ( 4, IRQPO2(IOFF), IERR_MPI )
 !/MPI        CALL MPI_WAITALL  ( 4, IRQPO2(IOFF), STAT, IERR_MPI )
+!/DEBUGIOPO       WRITE(740+IAPROC,*)    'W3IOPE, loop, step 12'
+!/DEBUGIOPO       FLUSH(740+IAPROC)
 !
 ! Interpolate spectrum
 !
@@ -807,6 +858,8 @@
           FAC3(IK) = TPI * SIG(IK) / CG(IK,IS(3))
           FAC4(IK) = TPI * SIG(IK) / CG(IK,IS(4))
           END DO
+!/DEBUGIOPO       WRITE(740+IAPROC,*)    'W3IOPE, loop, step 13'
+!/DEBUGIOPO       FLUSH(740+IAPROC)
 !
         DO IK=1,NK
           DO ITH=1,NTH
@@ -818,6 +871,8 @@
 !/T            SPTEST(IK,ITH) = SPCO(ISP,I)
             END DO
           END DO
+!/DEBUGIOPO       WRITE(740+IAPROC,*)    'W3IOPE, loop, step 14'
+!/DEBUGIOPO       FLUSH(740+IAPROC)
 !
 !/RTD        !!  Rotate the interpolated spectrum by -AnglD(IS(1)).  JGLi12Jun2012
 !/RTD        !!  SPCO still holds action not energy spectrum yet.  JGLi18Jun2013
@@ -841,6 +896,8 @@
 !/T       !              0.0001, 'E(f,theta)', 'm**2s', 'TEST OUTPUT' )
 !
         END DO
+!/DEBUGIOPO       WRITE(740+IAPROC,*)    'W3IOPE, leaving'
+!/DEBUGIOPO       FLUSH(740+IAPROC)
 !
       RETURN
 !

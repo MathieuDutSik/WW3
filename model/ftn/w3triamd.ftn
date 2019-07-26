@@ -1726,6 +1726,7 @@ END SUBROUTINE
       USE W3GDATMD, ONLY : TRIGP, NTRI, NX, NSEA, MAPFS, CLATIS, &
                            MAPSTA, ANGLE, FLAGLL,  IOBP, IEN, TRIA, NSEAL, NTRI 
       USE W3ADATMD, ONLY : NSEALM
+      USE W3ODATMD, ONLY: IAPROC
 !/PDLIB     USE yowElementpool
 !/PDLIB     use yowNodepool,    only: PDLIB_IEN, PDLIB_TRIA, NPA
 !/PDLIB      USE yowExchangeModule, only : PDLIB_exchange1Dreal
@@ -1746,10 +1747,13 @@ END SUBROUTINE
       REAL                 :: DEDX(3), DEDY(3)
       REAL                 :: DVDXIE, DVDYIE
       REAL                 :: WEI(NX), WEI_LOCAL(NSEAL)
-       
-     DIFFX = 0.              
-     DIFFY = 0. 
+      REAL                 :: DOUBLE_AREA
+
+     DIFFX = 0.
+     DIFFY = 0.
 !
+!/DEBUGINIT     WRITE(740+IAPROC,*) 'Beginning of UG_GRADIENTS'
+!/DEBUGINIT     FLUSH(740+IAPROC)
      IF (FLAGLL) THEN 
        FACT=1./(DERA*RADIUS)
      ELSE
@@ -1757,11 +1761,14 @@ END SUBROUTINE
      END IF
 
 !/PDLIB     IF (.NOT. LPDLIB) THEN
+!/DEBUGINIT       WRITE(740+IAPROC,*) 'Begin of global case'
+!/DEBUGINIT       FLUSH(740+IAPROC)
        WEI = 0.
        DO IE = 1, NTRI
          NI = TRIGP(IE,:)
          LATMEAN = 1./3. * SUM(CLATIS(MAPFS(1,NI)))
-         WEI(NI) = WEI(NI) + 2.*TRIA(IE)
+         DOUBLE_AREA = 2.*TRIA(IE)
+         WEI(NI) = WEI(NI) + DOUBLE_AREA
          IF (TRIA(IE) .LT. TINY(1.)) THEN
            WRITE(*,*) 'AREA SMALLER ZERO', IE, NTRI, TRIA(IE)
            STOP
@@ -1780,7 +1787,11 @@ END SUBROUTINE
        END DO
        DIFFX(1,:) = DIFFX(1,:)/WEI
        DIFFY(1,:) = DIFFY(1,:)/WEI
+!/DEBUGINIT       WRITE(740+IAPROC,*) 'End of global case'
+!/DEBUGINIT       FLUSH(740+IAPROC)
 !/PDLIB     ELSE
+!/PDLIB/DEBUGINIT       WRITE(740+IAPROC,*) 'Begin of local case'
+!/PDLIB/DEBUGINIT       FLUSH(740+IAPROC)
 !/PDLIB       WEI_LOCAL = 0.
 !/PDLIB       DO IE = 1, NE 
 !/PDLIB         NI      = INE(:,IE)
@@ -1806,9 +1817,16 @@ END SUBROUTINE
 !/PDLIB       END DO
 !/PDLIB       DIFFX(1,:) = DIFFX(1,:)/WEI_LOCAL
 !/PDLIB       DIFFY(1,:) = DIFFY(1,:)/WEI_LOCAL
+!/PDLIB/DEBUGINIT       WRITE(740+IAPROC,*) 'End of local case, before exchange'
+!/PDLIB/DEBUGINIT       WRITE(740+IAPROC,*) 'npa=', npa, ' NSEA=', NSEA, ' NSEAL=', NSEAL
+!/PDLIB/DEBUGINIT       WRITE(740+IAPROC,*) 'size(DIFFX,1),2=', size(DIFFX,1), size(DIFFX,2)
+!/PDLIB/DEBUGINIT       WRITE(740+IAPROC,*) 'size(DIFFY,1),2=', size(DIFFY,1), size(DIFFY,2)
+!/PDLIB/DEBUGINIT       FLUSH(740+IAPROC)
+!/PDLIB      CALL PDLIB_exchange1Dreal(DIFFX(1,1:NPA))
+!/PDLIB      CALL PDLIB_exchange1Dreal(DIFFY(1,1:NPA))
+!/PDLIB/DEBUGINIT       WRITE(740+IAPROC,*) 'After exchanges'
+!/PDLIB/DEBUGINIT       FLUSH(740+IAPROC)
 !/PDLIB     ENDIF
-!/PDLIB  CALL PDLIB_exchange1Dreal(DIFFX(1,1:NPA))
-!/PDLIB  CALL PDLIB_exchange1Dreal(DIFFY(1,1:NPA))
      
 !
     END SUBROUTINE UG_GRADIENTS
