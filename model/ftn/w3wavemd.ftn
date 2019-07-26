@@ -1352,7 +1352,7 @@
 !/MEMCHECK       call getMallocInfo(mallinfos)
 !/MEMCHECK       call printMallInfo(IAPROC,mallInfos)
 !
-        IF ( FLSOU .and. LPDLIB) THEN
+        IF ( FLSOU .and. LPDLIB .and. (GTYPE .eq. UNGTYPE)  ) THEN
 !
 !/OMP0/!$OMP PARALLEL DO PRIVATE (JSEA,ISEA,IX,IY) SCHEDULE (DYNAMIC,1)
           D50=0.0002
@@ -1997,7 +1997,7 @@
                      TMP2   = BEDFORMS(JSEA,1:3)
                      TMP3   = TAUBBL(JSEA,1:2)
                      TMP4   = TAUICE(JSEA,1:2)
-!/PDLIB              IF (FSSOURCE) THEN
+!/PDLIB              IF (FSSOURCE .and. (GTYPE .eq. UNGTYPE)) THEN
 !/PDLIB                   CALL W3SRCE(srce_imp_post,IT,JSEA,IX,IY,IMOD,  &
 !/PDLIB                      VAOLD(:,JSEA), VA(:,JSEA),                  &
 !/PDLIB                      VSTOT(:,JSEA),VDTOT(:,JSEA),SHAVETOT(JSEA), &

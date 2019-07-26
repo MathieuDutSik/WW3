@@ -838,6 +838,7 @@
 !/
       INTEGER, INTENT(IN)           :: IMOD, NDSE, NDST
       LOGICAL, INTENT(IN), OPTIONAL :: D_ONLY
+      INTEGER siz1, siz2
 !/
 !/ ------------------------------------------------------------------- /
 !/ Local parameters
@@ -1261,25 +1262,24 @@
                      WADATS(IMOD)%ATRNY(NY*NX,-1:1) , STAT=ISTAT      )
           CHECK_ALLOC_STATUS ( ISTAT )
 !
-          IF (.NOT. LPDLIB) THEN
-            ALLOCATE ( WADATS(IMOD)%DDDX(NY,NX)  ,                      &
-                       WADATS(IMOD)%DDDY(NY,NX)  ,                      &
-                       WADATS(IMOD)%DCDX(0:NK+1,NY,NX)  ,               &
-                       WADATS(IMOD)%DCDY(0:NK+1,NY,NX)  ,               &
-                       WADATS(IMOD)%DCXDX(NY,NX) ,                      &
-                       WADATS(IMOD)%DCYDX(NY,NX) ,                      &
-                       WADATS(IMOD)%DCXDY(NY,NX) ,                      &
-                       WADATS(IMOD)%DCYDY(NY,NX) , STAT=ISTAT           )
+!          Print *, 'LPDLIB=', LPDLIB
+!          Print *, 'NY=', NY, ' NX=', NX
+!          Print *, 'NSEAL=', NSEAL
+          IF (LPDLIB .and. (GTYPE .eq. UNGTYPE)) THEN
+            siz1 = 1
+            siz2 = NSEAL
           ELSE
-            ALLOCATE ( WADATS(IMOD)%DDDX(NY,NSEAL)  ,                      &
-                       WADATS(IMOD)%DDDY(NY,NSEAL)  ,                      &
-                       WADATS(IMOD)%DCDX(0:NK+1,NY,NSEAL)  ,               &
-                       WADATS(IMOD)%DCDY(0:NK+1,NY,NSEAL)  ,               &
-                       WADATS(IMOD)%DCXDX(NY,NSEAL) ,                      &
-                       WADATS(IMOD)%DCYDX(NY,NSEAL) ,                      &
-                       WADATS(IMOD)%DCXDY(NY,NSEAL) ,                      &
-                       WADATS(IMOD)%DCYDY(NY,NSEAL) , STAT=ISTAT           )
-          ENDIF
+            siz1 = NY
+            siz2 = NX
+          END IF
+          ALLOCATE ( WADATS(IMOD)%DDDX(siz1,siz2)  ,                      &
+                     WADATS(IMOD)%DDDY(siz1,siz2)  ,                      &
+                     WADATS(IMOD)%DCDX(0:NK+1,siz1,siz2)  ,               &
+                     WADATS(IMOD)%DCDY(0:NK+1,siz1,siz2)  ,               &
+                     WADATS(IMOD)%DCXDX(siz1,siz2) ,                      &
+                     WADATS(IMOD)%DCYDX(siz1,siz2) ,                      &
+                     WADATS(IMOD)%DCXDY(siz1,siz2) ,                      &
+                     WADATS(IMOD)%DCYDY(siz1,siz2) , STAT=ISTAT           )
           CHECK_ALLOC_STATUS ( ISTAT )
           WADATS(IMOD)%DDDX = 0.
           WADATS(IMOD)%DDDY = 0.
