@@ -1790,8 +1790,8 @@ END SUBROUTINE
 !/DEBUGINIT       WRITE(740+IAPROC,*) 'End of global case'
 !/DEBUGINIT       FLUSH(740+IAPROC)
 !/PDLIB     ELSE
-!/PDLIB/DEBUGINIT       WRITE(740+IAPROC,*) 'Begin of local case'
-!/PDLIB/DEBUGINIT       FLUSH(740+IAPROC)
+!/DEBUGINIT       WRITE(740+IAPROC,*) 'Begin of local case'
+!/DEBUGINIT       FLUSH(740+IAPROC)
 !/PDLIB       WEI_LOCAL = 0.
 !/PDLIB       DO IE = 1, NE 
 !/PDLIB         NI      = INE(:,IE)
@@ -1817,15 +1817,15 @@ END SUBROUTINE
 !/PDLIB       END DO
 !/PDLIB       DIFFX(1,:) = DIFFX(1,:)/WEI_LOCAL
 !/PDLIB       DIFFY(1,:) = DIFFY(1,:)/WEI_LOCAL
-!/PDLIB/DEBUGINIT       WRITE(740+IAPROC,*) 'End of local case, before exchange'
-!/PDLIB/DEBUGINIT       WRITE(740+IAPROC,*) 'npa=', npa, ' NSEA=', NSEA, ' NSEAL=', NSEAL
-!/PDLIB/DEBUGINIT       WRITE(740+IAPROC,*) 'size(DIFFX,1),2=', size(DIFFX,1), size(DIFFX,2)
-!/PDLIB/DEBUGINIT       WRITE(740+IAPROC,*) 'size(DIFFY,1),2=', size(DIFFY,1), size(DIFFY,2)
-!/PDLIB/DEBUGINIT       FLUSH(740+IAPROC)
+!/DEBUGINIT       WRITE(740+IAPROC,*) 'End of local case, before exchange'
+!/DEBUGINIT       WRITE(740+IAPROC,*) 'npa=', npa, ' NSEA=', NSEA, ' NSEAL=', NSEAL
+!/DEBUGINIT       WRITE(740+IAPROC,*) 'size(DIFFX,1),2=', size(DIFFX,1), size(DIFFX,2)
+!/DEBUGINIT       WRITE(740+IAPROC,*) 'size(DIFFY,1),2=', size(DIFFY,1), size(DIFFY,2)
+!/DEBUGINIT       FLUSH(740+IAPROC)
 !/PDLIB      CALL PDLIB_exchange1Dreal(DIFFX(1,1:NPA))
 !/PDLIB      CALL PDLIB_exchange1Dreal(DIFFY(1,1:NPA))
-!/PDLIB/DEBUGINIT       WRITE(740+IAPROC,*) 'After exchanges'
-!/PDLIB/DEBUGINIT       FLUSH(740+IAPROC)
+!/DEBUGINIT       WRITE(740+IAPROC,*) 'After exchanges'
+!/DEBUGINIT       FLUSH(740+IAPROC)
 !/PDLIB     ENDIF
      
 !

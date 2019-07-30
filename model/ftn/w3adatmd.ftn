@@ -1277,6 +1277,13 @@
             siz1 = NY
             siz2 = NX
           END IF
+          WRITE(740+IAPROC,*) 'IMOD=', IMOD
+          WRITE(740+IAPROC,*) '  LPDLIB=', LPDLIB
+          WRITE(740+IAPROC,*) '  GTYPE=', GTYPE, ' UNGTYPE=', UNGTYPE
+          WRITE(740+IAPROC,*) '  NSEAL=', NSEAL
+          WRITE(740+IAPROC,*) '  NX=', NX, ' NY=', NY
+          WRITE(740+IAPROC,*) '  siz1=', siz1, ' siz2=', siz2
+          FLUSH(740+IAPROC)
           ALLOCATE ( WADATS(IMOD)%DDDX(siz1,siz2)  ,                      &
                      WADATS(IMOD)%DDDY(siz1,siz2)  ,                      &
                      WADATS(IMOD)%DCDX(0:NK+1,siz1,siz2)  ,               &

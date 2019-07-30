@@ -1600,11 +1600,16 @@
 
                   IF ( MAPSTA(IY,IX) .EQ. 1 ) THEN
                            DEPTH  = MAX ( DMIN , DW(ISEA) )
-                           IF (LPDLIB) THEN
+                           IF (LPDLIB .and. (GTYPE .eq. UNGTYPE)) THEN
                              IXrel = JSEA
                            ELSE
                              IXrel = IX
                            END IF
+                  WRITE(740+IAPROC,*) 'LPDLIB=', LPDLIB
+                  WRITE(740+IAPROC,*) 'JSEA=', JSEA, ' ISEA=', ISEA
+                  WRITE(740+IAPROC,*) 'NSEAL=', NSEAL, ' IXrel=', IXrel
+                  FLUSH(740+IAPROC)
+                  
 !/PR1                      CALL W3KTP1 ( ISEA, FACTH, FACK, CTHG0S(ISEA), &
 !/PR1                           CG(:,ISEA), WN(:,ISEA), DEPTH,            &
 !/PR1                           DDDX(IY,IXrel), DDDY(IY,IXrel), CX(ISEA),       &
@@ -1889,7 +1894,7 @@
                   ENDIF
 
                   IF ( MAPSTA(IY,IX) .EQ. 1 ) THEN
-                           IF (LPDLIB) THEN
+                           IF (LPDLIB .and. (GTYPE .eq. UNGTYPE)) THEN
                              IXrel = JSEA
                            ELSE
                              IXrel = IX
