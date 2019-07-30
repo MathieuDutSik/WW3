@@ -4006,6 +4006,7 @@
 !/MPI      USE W3ODATMD, ONLY: OUTPTS, NRQPO, NRQPO2, IRQPO1, IRQPO2, &
 !/MPI                          NOPTS, IPTINT, IT0PNT, IT0TRK, O2IRQI
 !/MPI      USE W3PARALL, ONLY: INIT_GET_JSEA_ISPROC
+           USE W3GDATMD, ONLY: NSEAL
 !/
       IMPLICIT NONE
 !
@@ -4072,15 +4073,16 @@
 !
 ! 1.c Send if point is stored here
 !
-!/MPI          WRITE(740+IAPROC,*) 'I=', I, ' J=', J, ' IP(J)=', IP(J), 'IH=', IH
-!/MPI          WRITE(740+IAPROC,*) 'NAPPNT=', NAPPNT
-!/MPI          FLUSH(740+IAPROC)
+!/DEBUGINIT          WRITE(740+IAPROC,*) 'I=', I, ' J=', J, ' IP(J)=', IP(J), 'IH=', IH
+!/DEBUGINIT          WRITE(740+IAPROC,*) 'IRQPO1, JSEA=', JSEA, ' NSEAL=', NSEAL
+!/DEBUGINIT          WRITE(740+IAPROC,*) 'NAPPNT=', NAPPNT
+!/DEBUGINIT          FLUSH(740+IAPROC)
 !/MPI          IF ( IP(J) .EQ. IAPROC ) THEN
 !/MPI              IH     = IH + 1
 !/MPI              CALL MPI_SEND_INIT ( VA(1,JSEA), NSPEC, MPI_REAL, &
 !/MPI                   IROOT, IT, MPI_COMM_WAVE, IRQPO1(IH), IERR )
-!/MPI              WRITE(740+IAPROC,*) 'IH=', IH, ' IRQPO1(IH)=', IRQPO1(IH), ' IT=', IT
-!/MPI              FLUSH(740+IAPROC)
+!/DEBUGINIT                 WRITE(740+IAPROC,*) 'IH=', IH, ' IRQPO1(IH)=', IRQPO1(IH), ' IT=', IT
+!/DEBUGINIT                 FLUSH(740+IAPROC)
 !/MPIT              WRITE (NDST,9011) IH,I,J, IROOT,IT, IRQPO1(IH), IERR
 !/MPI            END IF
 !
@@ -4109,6 +4111,8 @@
 !
 !/MPIT          WRITE (NDST,9010) 'MPI_RECV_INIT'
 !
+!/DEBUGINIT        WRITE(740+IAPROC,*)  'NOPTS=', NOPTS
+!/DEBUGINIT        FLUSH(740+IAPROC)
 !/MPI          DO I=1, NOPTS
 !/MPI            DO K=1,4
 !/MPI              IX(K)=IPTINT(1,K,I)  
