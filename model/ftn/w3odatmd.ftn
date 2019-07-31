@@ -1368,6 +1368,9 @@
 !/ End of W3DMO5 ----------------------------------------------------- /
 !/
       END SUBROUTINE W3DMO5
+      SUBROUTINE PRINT_NRQPO(idx)
+      END SUBROUTINE
+
 !/ ------------------------------------------------------------------- /
       SUBROUTINE W3SETO ( IMOD, NDSERR, NDSTST )
 !/
@@ -1438,6 +1441,7 @@
 !/S      USE W3SERVMD, ONLY: STRACE
 !
       IMPLICIT NONE
+      INCLUDE "mpif.h"
 !
 !/
 !/ ------------------------------------------------------------------- /
@@ -1449,13 +1453,21 @@
 !/ Local parameters
 !/
       INTEGER                 :: NLOW
+      INTEGER  LOCPROC, IERR_MPI
 !/S      INTEGER, SAVE           :: IENT = 0
 !/
 !/S      CALL STRACE (IENT, 'W3SETO')
+
 !
 ! -------------------------------------------------------------------- /
 ! 1.  Test input and module status
 !
+      CALL MPI_COMM_RANK( MPI_COMM_WORLD, LOCPROC, IERR_MPI )
+      LOCPROC = LOCPROC + 1
+!/DEBUGINIT     WRITE(740+LOCPROC,*)   'Calling W3SETO'
+!/DEBUGINIT     FLUSH(740+LOCPROC)
+!/DEBUGINIT     WRITE(740+LOCPROC,*)   'W3SETO, step 1, NRQPO=', NRQPO
+!/DEBUGINIT     FLUSH(740+LOCPROC)
       IF ( NOUTP .EQ. -1 ) THEN
           WRITE (NDSERR,1001)
           CALL EXTCDE (1)
@@ -1473,6 +1485,8 @@
 ! 2.  Set model number
 !
       IOUTP  = IMOD
+!/DEBUGINIT     WRITE(740+LOCPROC,*)   'W3SETO, step 2, NRQPO=', NRQPO
+!/DEBUGINIT     FLUSH(740+LOCPROC)
 !
 ! -------------------------------------------------------------------- /
 ! 3.  Set pointers in structure OUTPUT
@@ -1497,6 +1511,8 @@
 !
       NOSWLL => OUTPTS(IMOD)%NOSWLL
 !
+!/DEBUGINIT     WRITE(740+LOCPROC,*)   'W3SETO, step 3, NRQPO=', NRQPO
+!/DEBUGINIT     FLUSH(740+LOCPROC)
       TOFRST => OUTPTS(IMOD)%TOFRST
       TONEXT => OUTPTS(IMOD)%TONEXT
       TOLAST => OUTPTS(IMOD)%TOLAST
@@ -1525,6 +1541,8 @@
       O2INIT => OUTPTS(IMOD)%OUT2%O2INIT
 !/MPI      O2IRQI => OUTPTS(IMOD)%OUT2%O2IRQI
 !
+!/DEBUGINIT     WRITE(740+LOCPROC,*)   'W3SETO, step 4, NRQPO=', NRQPO
+!/DEBUGINIT     FLUSH(740+LOCPROC)
       IF ( O2INIT ) THEN
           IPTINT => OUTPTS(IMOD)%OUT2%IPTINT
           IL     => OUTPTS(IMOD)%OUT2%IL
@@ -1539,13 +1557,15 @@
           ASO    => OUTPTS(IMOD)%OUT2%ASO
           CAO    => OUTPTS(IMOD)%OUT2%CAO
           CDO    => OUTPTS(IMOD)%OUT2%CDO
-          ICEO   => OUTPTS(IMOD)%OUT2%ICEO         
+          ICEO   => OUTPTS(IMOD)%OUT2%ICEO
           ICEHO  => OUTPTS(IMOD)%OUT2%ICEHO
           ICEFO  => OUTPTS(IMOD)%OUT2%ICEFO
           SPCO   => OUTPTS(IMOD)%OUT2%SPCO
           PTNME  => OUTPTS(IMOD)%OUT2%PTNME
           GRDID  => OUTPTS(IMOD)%OUT2%GRDID
         END IF
+!/DEBUGINIT     WRITE(740+LOCPROC,*)   'W3SETO, step 5, NRQPO=', NRQPO
+!/DEBUGINIT     FLUSH(740+LOCPROC)
 !
 !/MPI      IF ( O2IRQI ) THEN
 !/MPI          IRQPO1 => OUTPTS(IMOD)%OUT2%IRQPO1
@@ -1567,6 +1587,8 @@
           TRCKID => OUTPTS(IMOD)%OUT3%TRCKID
         END IF
 !
+!/DEBUGINIT     WRITE(740+LOCPROC,*)   'W3SETO, step 6, NRQPO=', NRQPO
+!/DEBUGINIT     FLUSH(740+LOCPROC)
       IFILE4 => OUTPTS(IMOD)%OUT4%IFILE4
 !/MPI      NRQRS  => OUTPTS(IMOD)%OUT4%NRQRS
 !/MPI      NBLKRS => OUTPTS(IMOD)%OUT4%NBLKRS
@@ -1601,6 +1623,8 @@
       O5INI3 => OUTPTS(IMOD)%OUT5%O5INI3
       O5INI4 => OUTPTS(IMOD)%OUT5%O5INI4
 !
+!/DEBUGINIT     WRITE(740+LOCPROC,*)   'W3SETO, step 7, NRQPO=', NRQPO
+!/DEBUGINIT     FLUSH(740+LOCPROC)
       IF ( O5INI1 ) THEN
           IPBPI  => OUTPTS(IMOD)%OUT5%IPBPI
           ISBPI  => OUTPTS(IMOD)%OUT5%ISBPI
@@ -1617,6 +1641,8 @@
           RDBPO  => OUTPTS(IMOD)%OUT5%RDBPO
         END IF
 !
+!/DEBUGINIT     WRITE(740+LOCPROC,*)   'W3SETO, step 8, NRQPO=', NRQPO
+!/DEBUGINIT     FLUSH(740+LOCPROC)
       IF ( O5INI3 ) THEN
           ABPI0  => OUTPTS(IMOD)%OUT5%ABPI0
           ABPIN  => OUTPTS(IMOD)%OUT5%ABPIN
@@ -1650,6 +1676,8 @@
       FLFORM => OUTPTS(IMOD)%OUT6%FLFORM
       O6INIT => OUTPTS(IMOD)%OUT6%O6INIT
 !
+!/DEBUGINIT     WRITE(740+LOCPROC,*)   'W3SETO, step 9, NRQPO=', NRQPO
+!/DEBUGINIT     FLUSH(740+LOCPROC)
       RETURN
 !
 ! Formats

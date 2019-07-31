@@ -253,6 +253,7 @@
 !/
 !/ ------------------------------------------------------------------- /
 !
+      Print *, 'IMPROC=', IMPROC
 !/DEBUGMULTI   WRITE(740+IMPROC,*) 'WMWAVEMD, main, step 1'
 !/DEBUGMULTI   FLUSH(740+IMPROC)
 
@@ -1036,7 +1037,7 @@
 ! 9.b Perform output
 !
             IF ( GRSTAT(I) .EQ. 7 ) THEN
-!/DEBUGMULTI   WRITE(740+IMPROC,*) 'WMWAVEMD, step 13.1'
+!/DEBUGMULTI   WRITE(740+IMPROC,*) 'WMWAVEMD, step 13.1, NRQPO=', NRQPO
 !/DEBUGMULTI   FLUSH(740+IMPROC)
 !/MPI            IF ( MPI_COMM_GRD .NE. MPI_COMM_NULL ) THEN
 !/DEBUGMULTI   WRITE(740+IMPROC,*) 'WMWAVEMD, step 13.2'
@@ -1050,7 +1051,7 @@
 !
 !/MPRF                CALL PRTIME ( PRFT0 )
 !
-!/DEBUGMULTI   WRITE(740+IMPROC,*) 'WMWAVEMD, step 13.3'
+!/DEBUGMULTI   WRITE(740+IMPROC,*) 'WMWAVEMD, step 13.3, NRQPO=', NRQPO
 !/DEBUGMULTI   FLUSH(740+IMPROC)
                 IF ( FLG_O1 ) THEN
 !/DEBUGMULTI   WRITE(740+IMPROC,*) 'WMWAVEMD, step 13.4'
@@ -1072,11 +1073,11 @@
                           END DO
 !
                       END IF
-!/DEBUGMULTI   WRITE(740+IMPROC,*) 'WMWAVEMD, step 13.6'
+!/DEBUGMULTI   WRITE(740+IMPROC,*) 'WMWAVEMD, step 13.6, NRQPO=', NRQPO
 !/DEBUGMULTI   FLUSH(740+IMPROC)
 !
                     CALL W3WAVE ( I, TSYNC(:,I), .FALSE. )
-!/DEBUGMULTI   WRITE(740+IMPROC,*) 'WMWAVEMD, step 13.7'
+!/DEBUGMULTI   WRITE(740+IMPROC,*) 'WMWAVEMD, step 13.7, NRQPO=', NRQPO
 !/DEBUGMULTI   FLUSH(740+IMPROC)
 !
                     IF ( FLGHG1 .AND. .NOT.FLGHG2 .AND.               &
@@ -1090,7 +1091,7 @@
                             END DO
                           END DO
                       END IF
-!/DEBUGMULTI   WRITE(740+IMPROC,*) 'WMWAVEMD, step 13.8'
+!/DEBUGMULTI   WRITE(740+IMPROC,*) 'WMWAVEMD, step 13.8, NRQPO=', NRQPO
 !/DEBUGMULTI   FLUSH(740+IMPROC)
 !
                     IF ( FLLSTL ) INFLAGS1(1) = .FALSE.
@@ -1123,7 +1124,7 @@
 ! 9.d Process unified point output for selected grid
 !
                 IF ( UNIPTS ) THEN
-!/DEBUGMULTI   WRITE(740+IMPROC,*) 'WMWAVEMD, step 13.11'
+!/DEBUGMULTI   WRITE(740+IMPROC,*) 'WMWAVEMD, step 13.11, NRQPO=', NRQPO
 !/DEBUGMULTI   FLUSH(740+IMPROC)
                     IF ( FLG_O2 ) THEN
 !/DEBUGMULTI   WRITE(740+IMPROC,*) 'WMWAVEMD, step 13.12'
@@ -1165,7 +1166,7 @@
 !/DEBUGMULTI   FLUSH(740+IMPROC)
 !
                   END IF
-!/DEBUGMULTI   WRITE(740+IMPROC,*) 'WMWAVEMD, step 13.15'
+!/DEBUGMULTI   WRITE(740+IMPROC,*) 'WMWAVEMD, step 13.15, NRQPO=', NRQPO
 !/DEBUGMULTI   FLUSH(740+IMPROC)
 !
 !/MPRF                CALL PRTIME ( PRFTN )
@@ -1187,7 +1188,7 @@
 !/MPI                TOUTP(1,I) = -1
 !/MPI                TOUTP(2,I) =  0
 ! 
-!/DEBUGMULTI   WRITE(740+IMPROC,*) 'WMWAVEMD, step 13.18'
+!/DEBUGMULTI   WRITE(740+IMPROC,*) 'WMWAVEMD, step 13.18, NRQPO=', NRQPO
 !/DEBUGMULTI   FLUSH(740+IMPROC)
 !/MPI                DO JO=1, NOTYPE
 !
@@ -1228,7 +1229,7 @@
                 DONE      = .TRUE.
 !
               END IF
-!/DEBUGMULTI   WRITE(740+IMPROC,*) 'WMWAVEMD, step 14'
+!/DEBUGMULTI   WRITE(740+IMPROC,*) 'WMWAVEMD, step 14, NRQPO=', NRQPO
 !/DEBUGMULTI   FLUSH(740+IMPROC)
 !
 ! 10. Go to next time step ------------------------------------------- /
@@ -1319,7 +1320,7 @@
                   END IF
 !
               END IF
-!/DEBUGMULTI   WRITE(740+IMPROC,*) 'WMWAVEMD, step 15'
+!/DEBUGMULTI   WRITE(740+IMPROC,*) 'WMWAVEMD, step 15, NRQPO=', NRQPO
 !/DEBUGMULTI   FLUSH(740+IMPROC)
 !
 ! ... End of loops started in 1. ------------------------------------- /

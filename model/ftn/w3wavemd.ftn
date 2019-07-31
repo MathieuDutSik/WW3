@@ -499,15 +499,28 @@
 !
 !/COU      SCREEN   =  333
 !
-!/DEBUGINIT      WRITE(740+IAPROC,*) 'W3WAVE, step 1'
+!/DEBUGINIT      WRITE(740+IAPROC,*) 'W3WAVE, step 1, NRQPO=', NRQPO
 !/DEBUGSRC      WRITE(740+IAPROC,*) 'Step 1 : max(UST)=', maxval(UST)
 !/DEBUGINIT      FLUSH(740+IAPROC)
+!/DEBUGINIT      WRITE(740+IAPROC,*) 'W3WAVE, step 1.1, IOUTP=', IOUTP, ' IMOD=', IMOD
       IF ( IOUTP  .NE. IMOD ) CALL W3SETO ( IMOD, NDSE, NDST )
+!/DEBUGINIT      WRITE(740+IAPROC,*) 'W3WAVE, step 1.1, NRQPO=', NRQPO
+!/DEBUGINIT      FLUSH(740+IAPROC)
       IF ( IGRID  .NE. IMOD ) CALL W3SETG ( IMOD, NDSE, NDST )
+!/DEBUGINIT      WRITE(740+IAPROC,*) 'W3WAVE, step 1.2, NRQPO=', NRQPO
+!/DEBUGINIT      FLUSH(740+IAPROC)
       IF ( IWDATA .NE. IMOD ) CALL W3SETW ( IMOD, NDSE, NDST )
+!/DEBUGINIT      WRITE(740+IAPROC,*) 'W3WAVE, step 1.3, NRQPO=', NRQPO
+!/DEBUGINIT      FLUSH(740+IAPROC)
       IF ( IADATA .NE. IMOD ) CALL W3SETA ( IMOD, NDSE, NDST )
+!/DEBUGINIT      WRITE(740+IAPROC,*) 'W3WAVE, step 1.4, NRQPO=', NRQPO
+!/DEBUGINIT      FLUSH(740+IAPROC)
       IF ( IIDATA .NE. IMOD ) CALL W3SETI ( IMOD, NDSE, NDST )
+!/DEBUGINIT      WRITE(740+IAPROC,*) 'W3WAVE, step 1.5, NRQPO=', NRQPO
+!/DEBUGINIT      FLUSH(740+IAPROC)
 !/UOST     CALL UOST_SETGRID(IMOD)
+!/DEBUGINIT      WRITE(740+IAPROC,*) 'W3WAVE, step 1.6, NRQPO=', NRQPO
+!/DEBUGINIT      FLUSH(740+IAPROC)
 
 !/DEBUGRUN      DO JSEA = 1, NSEAL
 !/DEBUGRUN        DO IS = 1, NSPEC
@@ -523,11 +536,15 @@
 !/DEBUGRUN        CALL FLUSH(740+IAPROC)
 !/DEBUGRUN        CALL EXTCDE(666)
 !/DEBUGRUN      ENDIF
+!/DEBUGINIT      WRITE(740+IAPROC,*) 'W3WAVE, step 1.7, NRQPO=', NRQPO
+!/DEBUGINIT      FLUSH(740+IAPROC)
 
 
 !/PDLIB!/DEBUGCOH          CALL ALL_VA_INTEGRAL_PRINT(IMOD, "W3WAVEMD, step 1")
 !/PDLIB!/DEBUGIOBP         IF (NX .ge. 10210) WRITE(*,*) 'CRIT 1:', MAPSTA(1,10210), IOBP(10210)
 
+!/DEBUGINIT      WRITE(740+IAPROC,*) 'W3WAVE, step 1.8, NRQPO=', NRQPO
+!/DEBUGINIT      FLUSH(740+IAPROC)
 !
       ALLOCATE(TAUWX(NSEAL), TAUWY(NSEAL))
 !/REFRX      ALLOCATE(CIK(NSEAL))
@@ -543,7 +560,7 @@
         ELSE
           SKIP_O = .FALSE.
         END IF
-!/DEBUGINIT      WRITE(740+IAPROC,*) 'W3WAVE, step 2'
+!/DEBUGINIT      WRITE(740+IAPROC,*) 'W3WAVE, step 2, NRQPO=', NRQPO
 !/DEBUGINIT      FLUSH(740+IAPROC)
 !/PDLIB!/DEBUGCOH          CALL ALL_VA_INTEGRAL_PRINT(IMOD, "W3WAVEMD, step 2")
 !
@@ -628,7 +645,7 @@
         ELSE
           DTL0   = 0.
         END IF
-!/DEBUGINIT      WRITE(740+IAPROC,*) 'W3WAVE, step 4'
+!/DEBUGINIT      WRITE(740+IAPROC,*) 'W3WAVE, step 4, NRQPO=', NRQPO
 !/DEBUGINIT      FLUSH(740+IAPROC)
 !/PDLIB!/DEBUGCOH          CALL ALL_VA_INTEGRAL_PRINT(IMOD, "W3WAVEMD, step 4")
 !
@@ -685,7 +702,7 @@
         ELSE
           DTI0   = 0.
         END IF
-!/DEBUGINIT      WRITE(740+IAPROC,*) 'W3WAVE, step 6'
+!/DEBUGINIT      WRITE(740+IAPROC,*) 'W3WAVE, step 6, NRQPO=', NRQPO
 !/DEBUGINIT      FLUSH(740+IAPROC)
 !/PDLIB!/DEBUGCOH          CALL ALL_VA_INTEGRAL_PRINT(IMOD, "W3WAVEMD, step 6")
 !
@@ -923,7 +940,7 @@
               WRITE (SCREEN,950) IDTIME, STTIME
             END IF
 
-!/MEMCHECK       write(740+IAPROC,*) 'memcheck_____:', 'WW3_WAVE TIME LOOP 2'
+!/MEMCHECK       write(740+IAPROC,*) 'memcheck_____:', 'WW3_WAVE TIME LOOP 2, NRQPO=', NRQPO
 !/MEMCHECK       call getMallocInfo(mallinfos)
 !/MEMCHECK       call printMallInfo(IAPROC,mallInfos)
 
@@ -1003,7 +1020,7 @@
               CFLXYMAX = 0.
             END IF
 
-!/MEMCHECK       write(740+IAPROC,*) 'memcheck_____:', 'WW3_WAVE TIME LOOP 4'
+!/MEMCHECK       write(740+IAPROC,*) 'memcheck_____:', 'WW3_WAVE TIME LOOP 4, NRQPO=', NRQPO
 !/MEMCHECK       call getMallocInfo(mallinfos)
 !/MEMCHECK       call printMallInfo(IAPROC,mallInfos)
 !
@@ -1015,7 +1032,7 @@
               END IF ! FLCUR
 !/TIMINGS         CALL PRINT_MY_TIME("After CX/CY assignation")
 !
-!/MEMCHECK       write(740+IAPROC,*) 'memcheck_____:', 'WW3_WAVE TIME LOOP 5'
+!/MEMCHECK       write(740+IAPROC,*) 'memcheck_____:', 'WW3_WAVE TIME LOOP 5, NRQPO=', NRQPO
 !/MEMCHECK       call getMallocInfo(mallinfos)
 !/MEMCHECK       call printMallInfo(IAPROC,mallInfos)
 
@@ -1049,7 +1066,7 @@
 
 !/TIMINGS         CALL PRINT_MY_TIME("After U10, etc. assignation")
 !
-!/DEBUGRUN        WRITE(740+IAPROC,*) 'W3WAVE, step 6.5'
+!/DEBUGRUN        WRITE(740+IAPROC,*) 'W3WAVE, step 6.5, NRQPO=', NRQPO
 !/DEBUGRUN        FLUSH(740+IAPROC)
 !/PDLIB!/DEBUGCOH          CALL ALL_VA_INTEGRAL_PRINT(IMOD, "Before call to W3UINI")
 !/TIMINGS         CALL PRINT_MY_TIME("Before call W3UINI")
@@ -1083,7 +1100,7 @@
 !/DEBUGIOBC     FLUSH(740+IAPROC)
 
                 IF ( READBC ) THEN
-!/DEBUGIOBC       WRITE(740+IAPROC,*) 'Before call to W3IOBC'
+!/DEBUGIOBC       WRITE(740+IAPROC,*) 'Before call to W3IOBC, NRQPO=', NRQPO
 !/DEBUGIOBC       FLUSH(740+IAPROC)
                   CALL W3IOBC ( 'READ', NDS(9), TBPI0, TBPIN,       &
                                 ITEST, IMOD )
@@ -1205,7 +1222,7 @@
 !
 !/IS2            END IF
 
-!/MEMCHECK       write(740+IAPROC,*) 'memcheck_____:', 'WW3_WAVE TIME LOOP 11a'
+!/MEMCHECK       write(740+IAPROC,*) 'memcheck_____:', 'WW3_WAVE TIME LOOP 11a, NRQPO=', NRQPO
 !/MEMCHECK       call getMallocInfo(mallinfos)
 !/MEMCHECK       call printMallInfo(IAPROC,mallInfos)
 !
@@ -1228,7 +1245,7 @@
                 ELSE
                   IDACT(5:5) = 'I'
                 END IF
-!/DEBUGRUN        WRITE(740+IAPROC,*) 'After time works'
+!/DEBUGRUN        WRITE(740+IAPROC,*) 'After time works, NRQPO=', NRQPO
 !/DEBUGRUN        FLUSH(740+IAPROC)
 !
               IF ( IDACT(5:5).NE.' ' ) THEN
@@ -1247,7 +1264,7 @@
                   FLDDIR = FLDDIR .OR.  FLCTH .OR. FSREFRACTION        &
                         .OR. FLCK .OR. FSFREQSHIFT
               END IF
-!/DEBUGRUN        WRITE(740+IAPROC,*) 'After IDACT if test'
+!/DEBUGRUN        WRITE(740+IAPROC,*) 'After IDACT if test, NRQPO=', NRQPO
 !/DEBUGRUN        FLUSH(740+IAPROC)
           END IF
 !/DEBUGRUN        WRITE(740+IAPROC,*) 'After FLLEV test'
@@ -1326,7 +1343,7 @@
 !/REFRX     !      CALL UG_GRADIENTS(CMN, DCDX, DCDY) !/ Stefan, to be confirmed!
 !/REFRX          END IF
 !
-!/DEBUGRUN        WRITE(740+IAPROC,*) 'W3WAVE, step 6.8.4'
+!/DEBUGRUN        WRITE(740+IAPROC,*) 'W3WAVE, step 6.8.4, NRQPO=', NRQPO
 !/DEBUGRUN        FLUSH(740+IAPROC)
 !
           FLIWND = .FALSE.
@@ -1452,7 +1469,7 @@
 !/PDLIB!/DEBUGSRC            WRITE(740+IAPROC,*) '     sum(VDTOT)=', sum(VDTOT(:,DEBUG_NODE))
 !/PDLIB!/DEBUGSRC          END IF
 
-!/MEMCHECK       write(740+IAPROC,*) 'memcheck_____:', 'WW3_WAVE TIME LOOP 14'
+!/MEMCHECK       write(740+IAPROC,*) 'memcheck_____:', 'WW3_WAVE TIME LOOP 14, NRQPO=', NRQPO
 !/MEMCHECK       call getMallocInfo(mallinfos)
 !/MEMCHECK       call printMallInfo(IAPROC,mallInfos)
 
@@ -1482,7 +1499,7 @@
 !/DEBUGRUN        WRITE(740+IAPROC,*) 'UGDTUPDATE=', UGDTUPDATE
 !/DEBUGRUN        FLUSH(740+IAPROC)
                 IF ( FLOGRD(9,3).AND. UGDTUPDATE ) THEN
-!/DEBUGRUN        WRITE(740+IAPROC,*) 'W3WAVE, step 6.8.6'
+!/DEBUGRUN        WRITE(740+IAPROC,*) 'W3WAVE, step 6.8.6, NRQPO=', NRQPO
 !/DEBUGRUN        FLUSH(740+IAPROC)
                   IF (FSTOTALIMP .eqv. .FALSE.) THEN
                       NKCFL=NK
@@ -1510,7 +1527,7 @@
 !
                     END IF
                 END IF
-!/DEBUGRUN        WRITE(740+IAPROC,*) 'W3WAVE, step 6.8.7'
+!/DEBUGRUN        WRITE(740+IAPROC,*) 'W3WAVE, step 6.8.7, NRQPO=', NRQPO
 !/DEBUGRUN        FLUSH(740+IAPROC)
 
 !/MEMCHECK       write(740+IAPROC,*) 'memcheck_____:', 'WW3_WAVE TIME LOOP 15'
@@ -1609,7 +1626,7 @@
                   WRITE(740+IAPROC,*) 'JSEA=', JSEA, ' ISEA=', ISEA
                   WRITE(740+IAPROC,*) 'NSEAL=', NSEAL, ' IXrel=', IXrel
                   FLUSH(740+IAPROC)
-                  
+
 !/PR1                      CALL W3KTP1 ( ISEA, FACTH, FACK, CTHG0S(ISEA), &
 !/PR1                           CG(:,ISEA), WN(:,ISEA), DEPTH,            &
 !/PR1                           DDDX(IY,IXrel), DDDY(IY,IXrel), CX(ISEA),       &
@@ -1730,7 +1747,7 @@
 !
 !/OMPX/!$OMP PARALLEL PRIVATE (ISPEC,FIELD)
 !
-!/DEBUGRUN        WRITE(740+IAPROC,*) 'W3WAVE, step 6.14'
+!/DEBUGRUN        WRITE(740+IAPROC,*) 'W3WAVE, step 6.14, NRQPO=', NRQPO
 !/DEBUGRUN        FLUSH(740+IAPROC)
 
             IF ( FLOMP ) ALLOCATE ( FIELD(1-NY:NY*(NX+2)) )
@@ -1940,7 +1957,7 @@
 !/TIMINGS         CALL PRINT_MY_TIME("fter intraspectral adv.")
 !
           UGDTUPDATE = .FALSE.
-!/DEBUGRUN        WRITE(740+IAPROC,*) 'W3WAVE, step 6.17'
+!/DEBUGRUN        WRITE(740+IAPROC,*) 'W3WAVE, step 6.17, NRQPO=', NRQPO
 !/DEBUGRUN        WRITE(740+IAPROC,*) 'FSSOURCE=', FSSOURCE
 !/DEBUGRUN        FLUSH(740+IAPROC)
 !
@@ -2094,7 +2111,7 @@
 !!/MPI              CALL MPI_BARRIER (MPI_COMM_WCMP,IERR_MPI)
 !
             END IF
-!/DEBUGRUN        WRITE(740+IAPROC,*) 'W3WAVE, step 6.18'
+!/DEBUGRUN        WRITE(740+IAPROC,*) 'W3WAVE, step 6.18, NRQPO=', NRQPO
 !/DEBUGRUN        FLUSH(740+IAPROC)
 !/PDLIB!/DEBUGCOH          CALL ALL_VA_INTEGRAL_PRINT(IMOD, "After source terms")
 !/TIMINGS         CALL PRINT_MY_TIME("After source terms")
@@ -2126,7 +2143,7 @@
 !
   380     CONTINUE
 !
-!/DEBUGRUN        WRITE(740+IAPROC,*) 'W3WAVE, step 6.20'
+!/DEBUGRUN        WRITE(740+IAPROC,*) 'W3WAVE, step 6.20, NRQPO=', NRQPO
 !/DEBUGRUN        FLUSH(740+IAPROC)
           IF (IT.NE.NT) THEN
               DTTST  = DSEC21 ( TIME , TCALC )
@@ -2171,7 +2188,7 @@
 ! 4.a Check if time is output time
 !     Delay if data assimilation time.
 !
-!/DEBUGRUN        WRITE(740+IAPROC,*) 'W3WAVE, step 6.21.2'
+!/DEBUGRUN        WRITE(740+IAPROC,*) 'W3WAVE, step 6.21.2, NRQPO=', NRQPO
 !/DEBUGRUN        FLUSH(740+IAPROC)
         IF ( TOFRST(1)  .EQ. -1 ) THEN
             DTTST  = 1.
@@ -2266,7 +2283,7 @@
 !/MPI       END IF
 !/MPI     END IF
 
-!/MEMCHECK       write(740+IAPROC,*) 'memcheck_____:', 'WW3_WAVE AFTER TIME LOOP 1'
+!/MEMCHECK       write(740+IAPROC,*) 'memcheck_____:', 'WW3_WAVE AFTER TIME LOOP 1, NRQPO=', NRQPO
 !/MEMCHECK       call getMallocInfo(mallinfos)
 !/MEMCHECK       call printMallInfo(IAPROC,mallInfos)
 
@@ -2315,7 +2332,7 @@
 !/MPI                  END IF
 !/MPI              END IF
 !
-!/DEBUGRUN      WRITE(740+IAPROC,*) 'After DO_OUTPUT_EXCHANGES, step 5'
+!/DEBUGRUN      WRITE(740+IAPROC,*) 'After DO_OUTPUT_EXCHANGES, step 5, NRQPO=', NRQPO
 !/DEBUGRUN      FLUSH(740+IAPROC)
 !/MPI           IF ( NRQMAX .NE. 0 ) ALLOCATE                         &
 !/MPI                                 ( STATIO(MPI_STATUS_SIZE,NRQMAX) )
@@ -2450,7 +2467,7 @@
                 END IF
 !
               END DO
-!/MEMCHECK       write(740+IAPROC,*) 'memcheck_____:', 'WW3_WAVE AFTER TIME LOOP 3'
+!/MEMCHECK       write(740+IAPROC,*) 'memcheck_____:', 'WW3_WAVE AFTER TIME LOOP 3, NRQPO=', NRQPO
 !/MEMCHECK       call getMallocInfo(mallinfos)
 !/MEMCHECK       call printMallInfo(IAPROC,mallInfos)
 
