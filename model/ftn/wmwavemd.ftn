@@ -254,7 +254,7 @@
 !/ ------------------------------------------------------------------- /
 !
       Print *, 'IMPROC=', IMPROC
-!/DEBUGMULTI   WRITE(740+IMPROC,*) 'WMWAVEMD, main, step 1'
+!/DEBUGMULTI   WRITE(740+IMPROC,*) 'WMWAVEMD, main, step 1, IMPROC=', IMPROC
 !/DEBUGMULTI   FLUSH(740+IMPROC)
 
 !/S      CALL STRACE (IENT, 'WMWAVE')

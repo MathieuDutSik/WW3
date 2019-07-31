@@ -1737,7 +1737,8 @@
 !/PDLIB       ENDIF
         ELSE
           IF (FLCX .or. FLCY) THEN
-!/DEBUGRUN        WRITE(740+IAPROC,*) 'W3WAVE, step 6.13'
+!/DEBUGRUN        WRITE(740+IAPROC,*) 'W3WAVE, step 6.13, NRQSG1=', NRQSG1
+!/DEBUGRUN        WRITE(740+IAPROC,*) 'GTYPE=', GTYPE, ' UNGTYPE=', UNGTYPE
 !/DEBUGRUN        FLUSH(740+IAPROC)
 !
 !/MPI       IF ( NRQSG1 .GT. 0 ) THEN
@@ -1754,9 +1755,11 @@
 !
 !/OMPX/!$OMP DO SCHEDULE (DYNAMIC,1)
 !
+!/DEBUGRUN        WRITE(740+IAPROC,*) 'W3WAVE, step 6.14.1, NRQPO=', NRQPO
+!/DEBUGRUN        FLUSH(740+IAPROC)
             DO ISPEC=1, NSPEC
               IF ( IAPPRO(ISPEC) .EQ. IAPROC ) THEN
-                IF (.NOT.LPDLIB .AND. RGLGRD) CALL W3GATH ( ISPEC, FIELD )
+                IF (.NOT.LPDLIB .OR. RGLGRD) CALL W3GATH ( ISPEC, FIELD )
 !/SMC !!Li   Otherwise use SMC sub to gether field
 !/SMC                CALL W3GATHSMC ( ISPEC, FIELD )
 !
@@ -1780,21 +1783,36 @@
 !/PRX                              FIELD, VGX, VGY, UGDTUPDATE )
 !/MPI             END IF
                 END IF
-                IF (.NOT.LPDLIB .AND. RGLGRD) CALL W3SCAT ( ISPEC, MAPSTA, FIELD )
+                IF (.NOT.LPDLIB .OR. RGLGRD) CALL W3SCAT ( ISPEC, MAPSTA, FIELD )
 !/SMC !!Li   Otherwise use SMC sub to scatter field
 !/SMC           CALL W3SCATSMC ( ISPEC, MAPSTA, FIELD )
 !
               END IF
             END DO
+!/DEBUGRUN        WRITE(740+IAPROC,*) 'W3WAVE, step 6.14.2, NRQPO=', NRQPO
+!/DEBUGRUN        WRITE(740+IAPROC,*) 'GTYPE=', GTYPE, ' UNGTYPE=', UNGTYPE, ' NRQSG1=', NRQSG1
+!/DEBUGRUN        FLUSH(740+IAPROC)
 !
 !/MPI       IF ( NRQSG1 .GT. 0 ) THEN
+!/DEBUGRUN        WRITE(740+IAPROC,*) 'W3WAVE, step 6.14.2.1'
+!/DEBUGRUN        FLUSH(740+IAPROC)
 !/MPI         ALLOCATE ( STATCO(MPI_STATUS_SIZE,NRQSG1) )
+!/DEBUGRUN        WRITE(740+IAPROC,*) 'W3WAVE, step 6.14.2.2'
+!/DEBUGRUN        FLUSH(740+IAPROC)
 !/MPI         CALL MPI_WAITALL (NRQSG1, IRQSG1(1,1), STATCO, &
 !/MPI                           IERR_MPI)
+!/DEBUGRUN        WRITE(740+IAPROC,*) 'W3WAVE, step 6.14.2.3'
+!/DEBUGRUN        FLUSH(740+IAPROC)
 !/MPI         CALL MPI_WAITALL (NRQSG1, IRQSG1(1,2), STATCO, &
 !/MPI                           IERR_MPI)
+!/DEBUGRUN        WRITE(740+IAPROC,*) 'W3WAVE, step 6.14.2.4'
+!/DEBUGRUN        FLUSH(740+IAPROC)
 !/MPI         DEALLOCATE ( STATCO )
+!/DEBUGRUN        WRITE(740+IAPROC,*) 'W3WAVE, step 6.14.2.5'
+!/DEBUGRUN        FLUSH(740+IAPROC)
 !/MPI         END IF
+!/DEBUGRUN        WRITE(740+IAPROC,*) 'W3WAVE, step 6.14.3, NRQPO=', NRQPO
+!/DEBUGRUN        FLUSH(740+IAPROC)
 
 !/MEMCHECK       write(740+IAPROC,*) 'memcheck_____:', 'WW3_WAVE TIME LOOP 17'
 !/MEMCHECK       call getMallocInfo(mallinfos)
@@ -1807,6 +1825,8 @@
 
 !/OMPX/!$OMP END PARALLEL
 
+!/DEBUGRUN        WRITE(740+IAPROC,*) 'W3WAVE, step 6.14.4, NRQPO=', NRQPO
+!/DEBUGRUN        FLUSH(740+IAPROC)
 !Li   Initialise IK IX IY in case ARC option is not used to avoid warnings.
               IK=1
               IX=1
@@ -1842,6 +1862,8 @@
 !
 !/ARC  !!Li   Boundary cell loop IK ends.
 !/ARC         END DO
+!/DEBUGRUN        WRITE(740+IAPROC,*) 'W3WAVE, step 6.14.5, NRQPO=', NRQPO
+!/DEBUGRUN        FLUSH(740+IAPROC)
 !
 !/ARC  !Li    Update Arctic boundary cell spectra if within local range
 !/ARC           ALLOCATE ( BACSPEC(NSPEC) )
@@ -1855,6 +1877,8 @@
 !/ARC           ENDIF
 !/ARC
 !/ARC  !Li    Work out boundary PE (ISPEC) and JSEA numbers for IX
+!/DEBUGRUN        WRITE(740+IAPROC,*) 'W3WAVE, step 6.14.6, NRQPO=', NRQPO
+!/DEBUGRUN        FLUSH(740+IAPROC)
 
           IF( ARCTIC ) THEN
 !/DIST            ISPEC = MOD( IX-1, NAPROC )
@@ -1862,6 +1886,8 @@
 !/SHRD            ISPEC = 0
 !/SHRD             JSEA = IX
           ENDIF
+!/DEBUGRUN        WRITE(740+IAPROC,*) 'W3WAVE, step 6.14.7, NRQPO=', NRQPO
+!/DEBUGRUN        FLUSH(740+IAPROC)
 !
 !/ARC              IF( IAPROC .EQ. ISPEC+1 ) THEN
 !/ARC                   BACSPEC = SPCBAC(:,IK)
@@ -1880,6 +1906,8 @@
 !
           END IF
         END IF
+!/DEBUGRUN        WRITE(740+IAPROC,*) 'W3WAVE, step 6.14.8, NRQPO=', NRQPO
+!/DEBUGRUN        FLUSH(740+IAPROC)
 
 !/PDLIB!/DEBUGCOH        CALL ALL_VA_INTEGRAL_PRINT(IMOD, "After spatial advection")
 !/TIMINGS         CALL PRINT_MY_TIME("After spatial advection")
